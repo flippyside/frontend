@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <script>
+      // 组件 -> 组件实例 -> 虚拟DOM -> DOM（在页面中呈现）
+
+      // 根组件。实例用组件来生成，组件是实例的模板
+      const Root = {
+        data() {
+          return {
+            count: 0,
+          };
+        },
+
+        // 用 {{属性名}} 来访问属性
+        template: "<button @click='count++'>hello</button> - {{count}}",
+      };
+
+      // 创建app实例, 将实例在页面中挂载
+      Vue.createApp(Root).mount("#app");
+    </script>
+  </body>
+</html>

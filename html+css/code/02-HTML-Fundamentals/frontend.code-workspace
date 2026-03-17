@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "name": "coding",
+      "path": "../../../../coding"
+    },
+    {
+      "name": "frontend",
+      "path": "../../.."
+    },
+    {
+      "name": "html+css",
+      "path": "../.."
+    }
+  ],
+  "settings": {
+    "liveServer.settings.multiRootWorkspaceName": "frontend"
+  }
+}

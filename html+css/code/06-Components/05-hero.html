@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    /*
+      SPACING SYSTEM (px)
+      2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128
+
+      FONT SIZE SYSTEM (px)
+      10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
+      */
+
+    /*
+      MAIN COLOR: #087f5b
+      GRAY COLOR: #343a40
+      */
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* ------------------------ */
+    /* GENERAL STYLES */
+    /* ------------------------ */
+    body {
+      font-family: "Inter", sans-serif;
+      color: #343a40;
+      border-bottom: 8px solid #087f5b;
+    }
+    .container {
+      margin: 0 auto;
+      width: 1200px;
+    }
+
+    header {
+      /* background-color: rgb(255, 121, 73); */
+      height: 100vh; /* 占据整个窗口 */
+
+      /* display: flex; */
+      /* align-items: center; */
+      position: relative;
+
+      background-image: linear-gradient(#00000060, #00000060), url(hero.jpg); /* 图片变暗 */
+      background-size: cover;
+      color: antiquewhite;
+    }
+    nav {
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      padding-top: 32px;
+    }
+
+    .header-container {
+      width: 1200px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      /* text-align: center; */
+    }
+
+    .header-container-inner {
+      width: 50%;
+    }
+    h1 {
+      font-size: 52px;
+      margin-bottom: 32px;
+      line-height: 1.05;
+    }
+    p {
+      font-size: 20px;
+      line-height: 1.6;
+      margin-bottom: 48px;
+    }
+    .btn:visited,
+    .btn:link {
+      font-size: 20px;
+      font-weight: 600;
+      background-color: #ff932e;
+      color: white;
+      text-decoration: none;
+      display: inline-block;
+      padding: 16px 32px;
+      border-radius: 10px;
+    }
+
+    h2 {
+      font-size: 44px;
+      margin-bottom: 48px;
+    }
+    section {
+      padding: 96px 0;
+      background-color: antiquewhite;
+    }
+  </style>
+  <body>
+    <header>
+      <nav class="container">
+        <div>LOGO</div>
+        <div>NAVIGATION</div>
+      </nav>
+
+      <div class="header-container">
+        <div class="header-container-inner">
+          <h1>A healthy meal delivered to your door, every single day</h1>
+          <p>
+            The smart 365-days-per-year food subscription that will make you eat
+            healthy again.
+          </p>
+        </div>
+        <a href="#" class="btn">start eating well</a>
+      </div>
+    </header>
+
+    <section>
+      <div class="container">
+        <h2>Some random heading</h2>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate
+          quidem est vitae. Rerum, voluptas soluta. Dolorum a amet natus!
+          Facilis eius veritatis quam error officiis totam neque vitae,
+          doloremque hic!
+        </p>
+      </div>
+    </section>
+  </body>
+</html>

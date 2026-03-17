@@ -1,0 +1,22 @@
+{
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@types/node": "^20.5.3",
+    "rollup": "^3.27.2",
+    "rollup-plugin-typescript2": "^0.35.0",
+    "typescript": "^5.1.6"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "rollup -c -w"
+  },
+  "dependencies": {
+    "@types/jquery": "^3.5.17",
+    "@types/react": "^18.2.21",
+    "axios": "^1.4.0",
+    "jquery": "^3.7.0",
+    "mitt": "^3.0.1",
+    "reflect-metadata": "^0.1.13",
+    "vue": "^3.3.4"
+  }
+}

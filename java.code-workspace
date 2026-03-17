@@ -1,0 +1,24 @@
+{
+  "folders": [
+    {
+      "path": "../../coding"
+    },
+    {
+      "path": ".."
+    },
+    {
+      "path": "../../backe-java"
+    }
+  ],
+  "settings": {
+    "liveServer.settings.multiRootWorkspaceName": "coding",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "git.ignoreLimitWarning": true,
+    "files.associations": {
+      "*.ejs": "html",
+      "vector": "cpp",
+      "iosfwd": "cpp"
+    }
+  }
+}
