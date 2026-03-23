@@ -1,6 +1,6 @@
 # HTML
 
-### src 和 href 的区别
+## src 和 href 的区别
 
 相同点：用于加载外部资源
 
@@ -9,7 +9,7 @@
 - src：直接加载资源。当浏览器解析到该元素时，会阻塞其他资源的加载和处理，直到该资源加载完成。 它会将资源内容嵌入到当前标签所在的位置，将其指向的资源下载应用到文档内，如 js 脚本等。常用在 img、script、iframe 等标签。
 - href：指向外部资源所在的位置，和当前元素位置建立链接，当浏览器解析到 href 时，会识别该文档为 css 文件，将其下载的时候不会阻塞其他资源的加载解析。常用在 a、link 标签。
 
-### HTML5 新增特性
+## HTML5 新增特性
 
 - 语义化标签，例如 header、footer、nav、main、section 等
 - 表单(input)类型新增了一些元素和属性，例如 email、number、时间控件、color 颜色拾取器、placeholder、autofocus 自动获取焦点
@@ -24,16 +24,16 @@ HTML 语义化标签：
 - 页面的内容结构化，可以使开发者更方便清晰地构建页面的布局，有利于代码可读性
 - 方便浏览器爬虫更好的识别内容。
 
-### Canvas 和 SVG 的区别
+## Canvas 和 SVG 的区别
 
 canvas 画布，是通过 javascript 来绘制 2d 图，是逐像素进行渲染。
 SVG 矢量图，是基于 XML 描述的 2D 图形语言，每个元素都是可用的，可以为其添加事件。
 
-### DOCTYPE(⽂档类型) 的作⽤
+## DOCTYPE(⽂档类型) 的作⽤
 
 DOCTYPE 是 HTML5 中一种标准通用标记语言的文档类型声明，是用来告诉浏览器的解析器，该用什么方式去加载识别文档。
 
-### iframe 有那些优点和缺点？
+## iframe 有那些优点和缺点？
 
 iframe 通常用来加载外部链接，不会影响网页内容的加载。
 
@@ -49,7 +49,7 @@ iframe 通常用来加载外部链接，不会影响网页内容的加载。
 - 会阻塞 onload 事件加载
 - 会产生很多页面，不利于管理
 
-### script 标签中 defer 和 async 的区别
+## script 标签中 defer 和 async 的区别
 
 相同点：都是表示异步加载外部 JS 脚本，不会阻碍页面的加载解析。
 
@@ -58,13 +58,13 @@ iframe 通常用来加载外部链接，不会影响网页内容的加载。
 - 执行顺序：有多个 async 标签不能保证先后加载顺序，而多个 defer 标签可以按先后顺序加载。
 - 是否立即执行：async 加载完脚本后会立即执行，defer 是要等文档解析完成后才执行。
 
-### 行内元素、块级元素、空（void）
+## 行内元素、块级元素、空（void）
 
 - 行内： a、b、span、input、img、select、 strong
 - 块：p、div、h1、ul、ol、li、dl、dt、dd
-- 空：<hr>、<br>、<img>、<input>、<link>、<meta>
+- 空：`<hr>`、`<br>`、`<img>`、`<input>`、`<link>`、`<meta>`
 
-### 怎样添加、移除、移动、复制、创建和查找节点
+## 怎样添加、移除、移动、复制、创建和查找节点
 
 - 添加节点 document.appendChild(dom)
 - 移除节点 document.removeChild(dom)
@@ -78,9 +78,40 @@ iframe 通常用来加载外部链接，不会影响网页内容的加载。
   - `document.querySelector("selector")`
   - `document.querySelectorAll("selector")`
 
+## 伪类和伪元素的区别是什么？
+
+- **伪类** ：以冒号(:)开头，用于选择处于特定**状态**的元素。例如 `:hover`, `:focus`, `:nth-child()`
+- **伪元素** ：以双冒号(::)开头，表现得像是在文档中插入新的虚构的元素（浏览器自动创建）。例如 `::before`, `::after`, `::first-letter`
+
+伪类使得你可以将处于特定状态的元素作为目标，就像你已向 DOM 添加了该状态的类一样。伪元素的作用就像是你已向 DOM 添加了全新的元素，并允许你为其设置样式。`::before` 和 `::after` 伪元素让你可以使用 CSS 将内容插入文档。
+
+利用伪类实现鼠标悬停时变为红色：
+
+```css
+a:hover {
+  color: red;
+}
+```
+
+利用伪元素实现选取段落的第一字母并加大字号：
+
+```css
+p::first-letter {
+  font-size: 20px;
+}
+```
+
+利用伪元素插入一个图标：
+
+```js
+.box::after {
+  content: " ➥";
+}
+```
+
 # CSS
 
-### CSS3 新增特性
+## CSS3 新增特性
 
 - 新增 CSS 选择器、伪类
 - 特效：text-shadow、box-shadow
@@ -89,7 +120,7 @@ iframe 通常用来加载外部链接，不会影响网页内容的加载。
 - 动画: animation
 - 圆角: border-radius
 
-### 盒模型
+## 盒模型
 
 对一个文档进行布局时，浏览器的渲染引擎会根据 CSS 基础盒模型，将所有元素表示为一个个矩形的盒子
 
@@ -117,7 +148,7 @@ box-sizing 属性定义了元素的盒模型：
 - border-box 表示 IE 盒模型，即 width、height 包含 border、padding
 - inherit 表示继承父元素的 box-sizing 属性
 
-### 选择器优先级
+## 选择器优先级
 
 选择器有：后面的数字代表权重
 
@@ -143,7 +174,7 @@ CSS3 新增：
 
 同级多个选最后一个生效。
 
-### 计算优先级
+## 计算优先级
 
 到具体的计算层⾯，优先级是由 A 、B、C、D 的值来决定的，其中它们的值计算规则如下：
 
@@ -158,7 +189,7 @@ CSS3 新增：
 - 如果相等，则继续往右移动一位进行比较
 - 如果 4 位全部相等，则后面的会覆盖前面的
 
-### CSS 可继承属性和不可继承属性
+## CSS 可继承属性和不可继承属性
 
 可继承
 
@@ -179,7 +210,7 @@ CSS3 新增：
 - width、height
 - position
 
-### display 的属性和作用
+## display 的属性和作用
 
 - block
 - inline
@@ -189,7 +220,7 @@ CSS3 新增：
 - none
 - inherit
 
-### 隐藏元素的方式
+## 隐藏元素的方式
 
 - display：none：元素在文档中不存在，不会占据位置。
 - visibility： hidden：元素在文档中的位置还保留，仍然占据空间。
@@ -197,7 +228,7 @@ CSS3 新增：
 - z-index：负值：直接将元素放置在最下层，利用其他元素来遮盖。
 - position：absolute：将元素定位到可视区域以外。
 
-### 单行、多行文本溢出
+## 单行、多行文本溢出
 
 单行
 
@@ -217,7 +248,7 @@ display:-webkit-box;         // 作为弹性伸缩盒子模型显示。
 -webkit-line-clamp:3;        // 显示的行数
 ```
 
-### 有了使用过 Sass、Less 吗？他们的区别是什么？
+## 有了使用过 Sass、Less 吗？他们的区别是什么？
 
 相同点：
 
@@ -234,28 +265,31 @@ display:-webkit-box;         // 作为弹性伸缩盒子模型显示。
 - 变量符不一样，Less 是@，而 Scss 是$。
 - Sass 支持条件语句，可以使用 if{}else{},for{}循环等等。而 Less 不支持
 
-### link 和 @import 的区别
+## link 和 @import 的区别
 
 - link 是 HTML 提供的标签，不仅可以加载 CSS 文件，还可以定义 RSS、rel 连接属性等
 - @import 是 CSS 提供等语法规则，只有导入样式表带作用。
 - link 标签引入的 CSS 被同时加载，而 @import 引入的 CSS 将在页面加载完毕后被加载
 - @import 是 CSS2.1 才有的语法，存在兼容性，而 link 作为 HTML 标签不存在兼容性问题
 
-### 常见的 CSS 单位
+## 常见的 CSS 单位
 
 - 绝对长度单位：cm、mm、in、px、pt、pc
 - 相对长度单位：大小和元素的其他属性无关。em、ex、ch、rem、vw、vh、vmin、vmax、%
-
 - px 像素
+
   - CSS 像素
   - 物理像素
+
 - 百分比 %：作用于父元素，当浏览器的宽度或者高度发生变化时，当前元素依据比例发生变化
 - em、rem：相对长度单位
+
   - em：相对于父元素
   - rem：相对于根元素
+
 - vw、vh：与视图窗口有关的单位，代表视图窗口的宽高
 
-### em/px/rem/vh/vw/% 区别
+## em/px/rem/vh/vw/% 区别
 
 px：绝对单位，页面按精确像素展示
 
@@ -274,7 +308,7 @@ vh、vw：主要用于页面视口大小布局
 - 对于 position: absolute 的元素是相对于已定位的父元素
 - 对于 position: fixed 的元素是相对于 ViewPort（可视窗口）
 
-### BFC、IFC 是什么
+## BFC、IFC 是什么
 
 - BFC：块级布局（垂直）
 - IFC：文本布局（水平）
@@ -303,7 +337,6 @@ BFC 目的是形成一个相对于外界完全独立的空间，让内部的子�
 - 实现自适应多栏布局：
   - 左边宽高固定，右边宽度自适应。防止下方元素飞到上方内容
 
-
 IFC(inline formatting context)，即行内格式化上下文，用于排列 inline-level 元素。
 
 在 IFC 中：
@@ -314,45 +347,48 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 - 行高由 line-height 决定
 
 触发 IFC 的条件：
+
 - 块级容器内部包含行内元素
 
 ```html
 <div>
   <span>text</span>
   <a>link</a>
-  <img>
+  <img />
 </div>
 ```
 
-### 浮动塌陷问题解决方法是什么？
+## 浮动塌陷问题解决方法是什么？
 
-浮动塌陷：子元素设置为float后，父元素高度变为0。
+浮动塌陷：子元素设置为 float 后，父元素高度变为 0。
 
 产生原因：
-- 设置为float后，子元素脱离标准流，不再占用实际空间，导致父元素计算高度时忽略了这个子元素，且父元素本身没有设置高度
+
+- 设置为 float 后，子元素脱离标准流，不再占用实际空间，导致父元素计算高度时忽略了这个子元素，且父元素本身没有设置高度
 
 解决方法：清除浮动
+
 - 伪元素清除法：在父元素内部末尾插入一个隐藏块级元素。（推荐使用）
 
 ```css
 .parent::after {
-    content: "";
-    display: block;
-    clear: both;
-    visibility: hidden;
-    height: 0;
+  content: "";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  height: 0;
 }
 .parent {
-    *zoom: 1; /* 兼容IE6/7 */
+  *zoom: 1; /* 兼容IE6/7 */
 }
 ```
 
-- 为父元素设置`overflow: hidden`，触发BFC，使得父元素在计算高度时也会包含float的子元素
-- 为父元素设置`overflow: auto`，同上一条，但内部宽高超过父级div时，会出现滚动条。 
-- 给父元素一个高度height
+- 为父元素设置 `overflow: hidden`，触发 BFC，使得父元素在计算高度时也会包含 float 的子元素
+- 为父元素设置 `overflow: auto`，同上一条，但内部宽高超过父级 div 时，会出现滚动条。
+- 给父元素一个高度 height
 - 父元素内部末尾插入一个空的 div 并设置 clear: both，清除浮动
 
-### 实现两栏布局
+## 实现两栏布局
 
 - float
 - flex
@@ -418,7 +454,7 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 }
 ```
 
-### 实现三栏布局
+## 实现三栏布局
 
 - 基于 float：两边使用 float，中间使用 margin
 - 基于绝对定位、：两边使用 absolute，中间使用 margin
@@ -427,7 +463,7 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 - flex 实现
 - grid 网格布局
 
-#### 两边使用 float，中间使用 margin
+### 两边使用 float，中间使用 margin
 
 - 左右两边固定宽度，中间宽度自适应。
 - 利用中间元素的 margin 值控制两边的间距
@@ -461,7 +497,7 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 }
 ```
 
-#### 两边使用 absolute，中间使用 margin
+### 两边使用 absolute，中间使用 margin
 
 - 左右两边使用绝对定位，固定在两侧。
 - 中间占满一行，但通过 margin 和左右两边留出 10px 的间隔
@@ -496,7 +532,7 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 }
 ```
 
-#### 两边使用 float 和负 margin
+### 两边使用 float 和负 margin
 
 - 中间使用了双层标签，外层是浮动的，以便左中右能在同一行展示
 - 左边使用负 margin-left:-100%：
@@ -542,7 +578,7 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 <div class="right">右边固定宽度</div>
 ```
 
-#### display: table 实现
+### display: table 实现
 
 `<table>` 标签用于展示行列数据，不适合用于布局。但是可以使用 `display: table` 来实现布局的效果
 
@@ -581,7 +617,7 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 </div>
 ```
 
-#### flex 实现
+### flex 实现
 
 利用 flex 弹性布局，可以简单实现中间自适应。
 
@@ -632,7 +668,7 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 </div>
 ```
 
-#### grid 网格布局
+### grid 网格布局
 
 - 将外部容器设置为 `display: grid`，并设置 `grid-template-columns`
 
@@ -658,13 +694,15 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 </div>
 ```
 
-### 实现元素的水平垂直居中
+## 实现元素的水平垂直居中
 
 根据元素标签的性质，可以分为：
 
 - 内联元素居中布局：
+
   - 内联元素（如 `<span>, <a>, <img>, <em>, <strong> `等）的特点是它们会排在一行，宽度由内容决定，并且不能设置 width 和 height。
   - 内联元素的居中布局，通常是通过设置它们的父级块级元素来实现的。
+
 - 块级元素居中布局：
 
   - 块级元素（如 `<div>, <p>, <h1>, <ul>, <li>` 等）的特点是它们独占一行，默认宽度为父元素的 100%，并且可以设置 width 和 height。
@@ -679,7 +717,7 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 - flex 布局
 - grid 布局
 
-#### 利用定位 + margin:auto
+### 利用定位 + margin:auto
 
 - 父元素设置为相对定位，子元素设置为绝对定位
 - 子元素的四个定位属性设为 0，并设置 margin: auto
@@ -703,7 +741,7 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 </div>
 ```
 
-#### 利用定位 + margin:负值
+### 利用定位 + margin:负值
 
 - 将子元素（.son）的左上角移动到父元素（.father）的中心点
 - 利用负外边距(margin)将子元素自身 向左和向上 平移 子元素宽度和高度的一半
@@ -729,7 +767,7 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 </style>
 ```
 
-#### 利用定位 + transform
+### 利用定位 + transform
 
 - 与负 margin 方法类似，只是将负 margin 替换为 translate(-50%, -50%)（将元素位移自身宽度和高度的-50%）
 
@@ -753,7 +791,7 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 </style>
 ```
 
-#### table 布局
+### table 布局
 
 - 设置父元素为 `display:table-cell`，子元素设置 `display: inline-block`
 - 利用 vertical 和 text-align 让所有的行内块级元素水平垂直居中
@@ -775,7 +813,7 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 </style>
 ```
 
-#### flex 布局
+### flex 布局
 
 flex 布局的关键属性作用：
 
@@ -795,7 +833,7 @@ flex 布局的关键属性作用：
 </style>
 ```
 
-#### grid 布局
+### grid 布局
 
 同 flex 布局。
 
@@ -811,7 +849,7 @@ flex 布局的关键属性作用：
 </style>
 ```
 
-### 理解 flex 布局
+## 理解 flex 布局
 
 flex 布局是 CSS3 新增的一种布局方式，能够根据不同屏幕尺寸的变化来自适应大小。
 
@@ -824,15 +862,15 @@ flex 布局是 CSS3 新增的一种布局方式，能够根据不同屏幕尺寸
 - align-items 属性定义项目在交叉轴上如何对齐。
 - align-content 属性定义了多根轴线的对齐方式。如果项目只有一根轴线，该属性不起作用。
 
-`flex: 1`是`flex-grow、flex-shrink、flex-basis`的缩写，默认值是`0 1 auto`。
+`flex: 1`是 `flex-grow、flex-shrink、flex-basis`的缩写，默认值是 `0 1 auto`。
 
-`flex：1`也可写成`flex： 1 1 auto`。
+`flex：1`也可写成 `flex： 1 1 auto`。
 
 - flex-grow 定义项目发大比例，默认为 0，即存在剩余空间，也不放大。
 - flex-shrink 定义项目收缩比例，默认为 1，即空间不足，也会进行缩小。
 - flex-basis 定义项目给上面两个属性分配多余空间之前, 计算项目是否有多余空间, 默认值为 auto, 即项目本身的大小。
 
-### 什么是 margin 重叠，如何解决
+## 什么是 margin 重叠，如何解决
 
 两个块级元素分别设置上下 margin 时可能会导致边距合并为一个边距，合并到边距取最大的那个值。需要注意的是，浮动的元素和绝对定位这种脱离文档流的元素的外边距不会折叠。重叠只会出现在垂直方向。
 
@@ -857,7 +895,7 @@ flex 布局是 CSS3 新增的一种布局方式，能够根据不同屏幕尺寸
 - 子元素变为行内盒子：display: inline-block
 - 子元素加入浮动属性或定位
 
-### position 常用属性 默认值是什么
+## position 常用属性 默认值是什么
 
 - static 默认值，没有定位，元素正常在文档流中显示
 - relative 相对定位，相对于原来的位置进行定位
@@ -865,7 +903,7 @@ flex 布局是 CSS3 新增的一种布局方式，能够根据不同屏幕尺寸
 - fixed 绝对定位，相对于浏览器窗口
 - sticky 粘性定位，基于用户滚动位置
 
-### 实现一个三角形
+## 实现一个三角形
 
 通过设置不同方向边框来实现
 
@@ -879,7 +917,7 @@ div {
 }
 ```
 
-### 画一条 0.5px 的线
+## 画一条 0.5px 的线
 
 使用 transform: scale()的方式，该方法用来定义元素的 2D 缩放转换：
 
@@ -887,7 +925,7 @@ div {
 transform: scale(0.5, 0.5);
 ```
 
-### 如何解决 1px
+## 如何解决 1px
 
 1px 问题指的是：在一些 Retina 屏幕 的机型上，移动端页面的 1px 会变得很粗，呈现出不止 1px 的效果。原因很简单——CSS 中的 1px 并不能和移动设备上的 1px 划等号。
 
