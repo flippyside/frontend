@@ -146,9 +146,9 @@ axios：
 
 | 技术  | 是否基于 Promise |
 | ----- | ---------------- |
-| XHR   | ❌（原生不支持） |
-| fetch | ✅               |
-| axios | ✅               |
+| XHR   | ❌（原生不支持）  |
+| fetch | ✅                |
+| axios | ✅                |
 
 ## Axios 如何在底层实现 CSRF 防御机制
 
