@@ -50,8 +50,8 @@ this 是在创建函数的执行环境时，在创建阶段确定的。
 
 判断 this 指向：
 
-- 如果()左边是一个引用(reference),那么，函数的 this 指向的就是这个引用所属的对象。例如`foo.func();`
-- 否则 this 指向的就是全局对象(window|global)。例如`func();`
+- 如果()左边是一个引用(reference),那么，函数的 this 指向的就是这个引用所属的对象。例如 `foo.func();`
+- 否则 this 指向的就是全局对象(window|global)。例如 `func();`
 
 ## 箭头函数与普通函数的区别
 
@@ -70,8 +70,8 @@ this 是在创建函数的执行环境时，在创建阶段确定的。
 
 浏览器的 resize、scroll、keypress、mousemove 等事件在触发时，会不断地调用绑定在事件上的回调函数，极大地浪费资源，降低前端性能。为了优化体验，需要对这类事件进行调用次数的限制，对此我们就可以采用 防抖（debounce） 和 节流（throttle） 的方式来减少调用频率
 
-- 节流：n 秒内只运行一次，若在 n 秒内被重复触发，只有一次生效
 - 防抖：n 秒后再执行此事件。若在 n 秒内被重复触发，则重新计时
+- 节流：n 秒内只运行一次，若在 n 秒内被重复触发，只有一次生效
 
 区别：
 
@@ -186,9 +186,159 @@ function asnycJob() {
 
 ## 柯里化
 
-柯里化：一种将使用多个参数的一个函数转换成一系列使用一个参数的函数的技术。
+> 柯里化：接收一部分参数，返回一个函数接收剩余参数，接收足够参数后，执行原函数
 
-在数学和计算机科学中的柯里化函数，一次只能传递一个参数；而 Javascript 实际应用中的柯里化函数，可以传递一个或多个参数。
+- 在数学和计算机科学中的柯里化函数，一次只能传递一个参数；
+- 而 Javascript 实际应用中的柯里化函数，可以传递一个或多个参数。
+
+例子：柯里化函数 `_fn`
+- 当接收的参数数量与原函数的形参数量相同时，执行原函数； 
+- 当接收的参数数量小于原函数的形参数量时，返回一个函数用于接收剩余的参数，直至接收的参数数量与形参数量一致，执行原函数。
+
+```js
+//普通函数
+function fn(a,b,c,d,e) {
+  console.log(a,b,c,d,e)
+}
+//生成的柯里化函数
+let _fn = curry(fn);
+
+_fn(1,2,3,4,5);     // print: 1,2,3,4,5
+_fn(1)(2)(3,4,5);   // print: 1,2,3,4,5
+_fn(1,2)(3,4)(5);   // print: 1,2,3,4,5
+_fn(1)(2)(3)(4)(5); // print: 1,2,3,4,5
+```
+
+柯里化的用途：通过参数复用，使得代码更简洁、直观
+- 正则检验，比如校验电话号码、校验邮箱、校验身份证号、校验密码等。
+
+```js
+function checkByRegExp(regExp,string) {
+    return regExp.test(string);  
+}
+
+//进行柯里化
+let _check = curry(checkByRegExp);
+//生成工具函数，验证电话号码
+let checkCellPhone = _check(/^1\d{10}$/);
+//生成工具函数，验证邮箱
+let checkEmail = _check(/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/);
+
+checkCellPhone('18642838455'); // 校验电话号码
+checkCellPhone('13109840560'); // 校验电话号码
+checkCellPhone('13204061212'); // 校验电话号码
+
+checkEmail('test@163.com'); // 校验邮箱
+checkEmail('test@qq.com'); // 校验邮箱
+checkEmail('test@gmail.com'); // 校验邮箱
+```
+
+### 实现 curry 函数
+
+思路：“递归收集参数”的过程：
+- 每次调用都累积参数
+- 判断参数是否足够
+  - 不够 → 继续返回函数（递归）
+  - 足够 → 执行原函数
+
+```
+/**
+ * 将函数柯里化
+ * @param fn    待柯里化的原函数
+ * @param len   所需的参数个数，默认为原函数的形参个数
+ */
+function curry(fn, len = fn.length) {
+    return _curry.call(this, fn, len)
+}
+
+/**
+ * 中转函数
+ * @param fn    待柯里化的原函数
+ * @param len   所需的参数总数
+ * @param args  当前已收集到的参数列表
+ */
+function _curry(fn, len, ...args) {
+    return function (...params) {
+        let _args = [...args, ...params]; // 把“历史参数 + 新参数”拼在一起
+        if(_args.length >= len){
+            // 参数够了，执行原函数
+            return fn.apply(this, _args);
+        }else{
+            return _curry.call(this, fn, len, ..._args)
+        }
+    }
+}
+```
+
+### 实现类似lodash的占位符 curry
+
+我们常用的工具库 lodash 也提供了 curry 方法，并且增加了非常好玩的 placeholder 功能，通过占位符的方式来改变传入参数的顺序。
+
+比如说，我们传入一个占位符，本次调用传递的参数略过占位符，
+占位符所在的位置由下次调用的参数来填充
+
+思路：
+- 对于 lodash 的 curry 函数来说，curry 函数挂载在 lodash 对象上，所以将 lodash 对象当做默认占位符来使用。
+- 而我们的自己实现的 curry 函数，本身并没有挂载在任何对象上，所以将 curry 函数当做默认占位符
+- 使用占位符，目的是改变参数传递的顺序，所以在 curry 函数实现中，每次需要记录是否使用了占位符，并且记录占位符所代表的参数位置。
+
+
+```js
+/**
+ * @param  fn           待柯里化的函数
+ * @param  length       需要的参数个数，默认为函数的形参个数
+ * @param  holder       占位符，默认当前柯里化函数
+ * @return {Function}   柯里化后的函数
+ */
+function curry(fn,length = fn.length,holder = curry){
+    return _curry.call(this,fn,length,holder,[],[])
+}
+/**
+ * 中转函数
+ * @param fn            柯里化的原函数
+ * @param length        原函数需要的参数个数
+ * @param holder        接收的占位符
+ * @param args          已接收的参数列表
+ * @param holders       已接收的占位符位置列表
+ * @return {Function}   继续柯里化的函数 或 最终结果
+ */
+function _curry(fn,length,holder,args,holders){
+    return function(..._args){
+        //将参数复制一份，避免多次操作同一函数导致参数混乱
+        let params = args.slice();
+        //将占位符位置列表复制一份，新增加的占位符增加至此
+        let _holders = holders.slice();
+        //循环入参，追加参数 或 替换占位符
+        _args.forEach((arg,i)=>{
+            //真实参数 之前存在占位符 将占位符替换为真实参数
+            if (arg !== holder && holders.length) {
+                let index = holders.shift();
+                _holders.splice(_holders.indexOf(index),1);
+                params[index] = arg;
+            }
+            //真实参数 之前不存在占位符 将参数追加到参数列表中
+            else if(arg !== holder && !holders.length){
+                params.push(arg);
+            }
+            //传入的是占位符,之前不存在占位符 记录占位符的位置
+            else if(arg === holder && !holders.length){
+                params.push(arg);
+                _holders.push(params.length - 1);
+            }
+            //传入的是占位符,之前存在占位符 删除原占位符位置
+            else if(arg === holder && holders.length){
+                holders.shift();
+            }
+        });
+        // params 中前 length 条记录中不包含占位符，执行函数
+        if(params.length >= length && params.slice(0,length).every(i=>i!==holder)){
+            return fn.apply(this,params);
+        }else{
+            return _curry.call(this,fn,length,holder,params,_holders)
+        }
+    }
+}
+```
 
 ## js 的垃圾回收
 
