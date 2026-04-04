@@ -62,6 +62,8 @@ document.write(`大家好，我叫${name}, 今年${age}岁`);
 数组
 ![alt text](assets/js-note/image.png)
 
+
+
 ## 函数
 
 ```js
@@ -110,6 +112,8 @@ Math.random()随机数函数，返回一个 0-1 之间，并且包括 0 不包�
 
 函数也是对象，可以动态添加属性和方法
 
+
+
 ## 对象
 
 声明：
@@ -133,7 +137,11 @@ for (let k in obj) {
 }
 ```
 
+
+
 ---
+
+
 
 局部作用域分为
 
