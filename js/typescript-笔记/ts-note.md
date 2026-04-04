@@ -29,8 +29,6 @@ function demo(x: number, y: number): number {
 }
 ```
 
-
-
 ### 类
 
 super：是指向自己超（父）类对象的一个指针，而这个超类指的是离自己最近的一个父类。
@@ -41,7 +39,7 @@ super：是指向自己超（父）类对象的一个指针，而这个超类指
 
 reaonly 在构造函数中可以随意修改（初始化） 在其他的地方就不能再次修改了。
 
-###  枚举
+### 枚举
 
 枚举可以看做是自带类型的对象。枚举的值为数字时会自动根据第一个的值来递增 ，数字类型的枚举可以反举。
 
@@ -135,8 +133,6 @@ const res: ApiResponse<string> = {
 };
 ```
 
-
-
 ### null undefined never
 
 严格模式下，null 和 undefined只能赋值给null和undefined
@@ -174,8 +170,6 @@ let direction: Direction = "Down";
 对象联合类型：实现属性互斥
 
 类型断言：as
-
-
 
 交叉类型的符号是&，类似按位与。需同时满足类型。 （交集）
 
@@ -215,8 +209,6 @@ let str: string | number;
 str! as any as boolean;
 ```
 
-
-
 ### 函数类型
 
 描述函数的参数与返回值类型。
@@ -228,9 +220,7 @@ let sum: Sum = (a: string, b: string) => {
 }
 ```
 
-
-
-### 接口
+### 接口 interface
 
 - 用来描述数据形状的 （对象、类、函数、混合类型）
 - 接口中的内容都是抽象的 （不能有具体的实现）
@@ -261,10 +251,10 @@ let veg1: IVegetables = {
 如何定义一个对象，并添加一个对象接口中没有的属性：
 
 - 方案 1：直接采用断言的方式指定为当前赋值的类型
-- 方案 2：在类型中通过`?`增添 a 属性为可选属性
+- 方案 2：在类型中通过 `?`增添 a 属性为可选属性
 - 方案 3：利用同名接口合并的特点
 - 方案 4：通过接口继承的方式扩展属性
-- 方案 5：通过任意类型来扩展。在接口中添加`[key:string]:any;`
+- 方案 5：通过任意类型来扩展。在接口中添加 `[key:string]:any;`
 - 类型兼容性、交叉类型等
 
 使用implements实现接口，接口中的所有内容必须被实现
@@ -296,14 +286,12 @@ interface 与 抽象类 的区别：
 ```ts
 function createArray<U>(len:number, val:U){
 	let result = []
-  for(let i = 0; i < len; i++){
-    result.push(val)
-  }
+	for(let i = 0; i < len; i++){
+		result.push(val)
+	}
 }
 createArray(3, 'abc')
 ```
-
-
 
 交换元组中的两个变量：
 
@@ -326,7 +314,7 @@ let res = swap(["abc", 123])
 type Union<T> = T | number | string
 ```
 
-泛型约束：要求传递的参数必须符合要求。T extends B 表示 T必须是B的子类型。注意，对于对象而言，子的类型结构是多于父
+泛型约束：要求传递的参数必须符合要求。T extends B 表示 T必须是B的子类型。注意，对于对象而言，子的类型结构是**多于**父
 
 ```typescript
 function handle<T extends string>(val: T): T {
@@ -334,11 +322,9 @@ function handle<T extends string>(val: T): T {
 }
 ```
 
-
-
 ### 交叉类型
 
-&，将多个类型合并为一个类型（交集，数学集合意义上的合并）：
+&，将多个类型合并为一个类型（类型交集，是数学集合意义上的**合并**）：
 
 ```ts
 interface Person1 {
@@ -353,7 +339,7 @@ let p: P1P2 = { handsome: "帅", high: "高" };
 
 ### unknown
 
-unknown是安全版的any，任何类型都可以赋值为`unknown`类型，但 unknown 会进行类型检测。
+unknown是安全版的any，任何类型都可以赋值为 `unknown`类型，但 unknown 会进行类型检测。
 
 > 不能访问 unknown 类型上的属性，不能作为函数、类来使用
 
@@ -396,7 +382,7 @@ sum(123, 123); // number
 
 ### 条件类型分发
 
-条件类型分发：当类型参数是联合类型时，条件类型会自动对联合类型的每个成员分别执行判断，然后再把结果联合起来。
+条件类型分发：当类型参数是联合类型时，条件类型会自动对联合类型的每个成员**分别**执行判断，然后再把结果联合起来。
 
 触发条件：A extends B
 
@@ -404,17 +390,17 @@ sum(123, 123); // number
 - A是联合类型
 - A是裸露的
 
-下面的代码展示了条件类型分发，`Fish | Bird`将分别被判断是否`extends Fish`。
+下面的代码展示了条件类型分发，`Fish | Bird`将分别被判断是否 `extends Fish`。
 
 ```ts
 type Conditional<T> = T extends Fish ? Water : Sky
 type R1 = Conditional<Fish | Bird> // Water | Sky
 ```
 
-禁用分发：有时我们希望将结果运算后再比较，就需要关闭这种默认的分发机制。思路是避免泛型的裸露。有两种方式： 
+禁用分发：有时我们希望将结果**运算后再比较**，就需要关闭这种默认的分发机制。思路是避免泛型的裸露。有两种方式：
 
 - `T & {}` 返回一个新类型
-- `[T] extends [U]` 
+- `[T] extends [U]`
 
 ```ts
 type NoDistribute<T> = T & {}
@@ -466,11 +452,9 @@ type NonNullable<T> = T & {}; // 保留联合类型中非空的值
 type MyNone = NonNullable<"a" | null | undefined>;
 ```
 
-
-
 ### infer 类型推断
 
-基于infer的ts内置类型：
+ts内置类型：基于infer实现
 
 - 1.`ReturnType `返回值类型
 - 2.`Parameters` 参数类型
@@ -553,13 +537,11 @@ type TupleToUnion = [string, number, boolean][number];
 // 结果都是 string | number | boolean
 ```
 
-
-
 ### 映射类型
 
 类似于map，基于key映射到value的类型
 
-- Partial：将所有属性转化为可选（后面加一个`?`）	
+- Partial：将所有属性转化为可选（后面加一个 `?`）
   - DeepPartial: 递归转化，适用于有嵌套属性的情况
 - Required：将所有属性转化为必填
 - Readonly：将所有属性转化为只读
@@ -595,14 +577,12 @@ type Readonly<T> = {
   - ```ts
     type PickPerson = Pick<Person, "name" | "age">;
     ```
-
 - Omit: 忽略属性
 
   - `type OmitAddress = Omit<typeof person, "address">;`
-
 - Record：记录类型。表示键值对
 
-  - 通常用来代替 object 
+  - 通常用来代替 object
     - `let person: Record<string, any> = {name:"abc", age:20}`
   - 实现 map 方法时，我们经常用 record 类型表示映射类型
 
@@ -624,7 +604,7 @@ type Record<K extends keyof any, V> = { [P in K]: V}
 - `[ ]`: 索引查询
 - in：循环的
 - extends：条件
-- `K extends keyof any`：所有可以用来当作key的类型，即`string | number | symbol`。这是因为在 JS 中，对象的键名（包括数组下标、Symbol）只能是这三种类型
+- `K extends keyof any`：所有可以用来当作key的类型，即 `string | number | symbol`。这是因为在 JS 中，对象的键名（包括数组下标、Symbol）只能是这三种类型
 
 实现mixin：
 
@@ -792,8 +772,6 @@ function getCount(count: BTC) {
 let count = getCount(usdt); // 报错：无法传入usdt
 ```
 
-
-
 ### 类型保护
 
 即类型的收窄。
@@ -828,8 +806,6 @@ function getAniaml(animal: Fish | Bird) {
 注意，ts是静态类型检测，内部方法无法解析外层函数的默认值
 
 ### 自定义类型
-
-
 
 ### 模板字符串
 
@@ -900,8 +876,6 @@ type GetNameFirstChar<T> = T extends `${infer F} ${infer X}` ? F : never
 type FirstChar = GetNameFirstChar<"yu xin"> // yu
 ```
 
-
-
 ## 装饰器
 
 ES6 提出了装饰器。
@@ -936,7 +910,7 @@ class Person {}
 返回值：
 
 - 有返回值：返回的新类替换掉被装饰的类
-- 无返回值：被装饰的类不会被替换 
+- 无返回值：被装饰的类不会被替换
 
 构造类型：
 
@@ -1087,19 +1061,13 @@ class Person {
 }
 ```
 
-
-
 ### 方法装饰器
 
 ### 访问器装饰器
 
 ### 参数装饰器
 
-
-
 ## 模块及命名空间使用
-
-
 
 模块：
 
@@ -1110,8 +1078,6 @@ export default "jw";
 // index.ts导入
 import name from "./a";
 ```
-
-
 
 ### 命名空间
 
@@ -1144,13 +1110,11 @@ namespace ROLE {
 }
 ```
 
-
-
 ## 类型声明
 
 用declare声明类型。
 
-类型声明文件：一般情况下，我们会将 declare 声明的内容放置到类型声明文件中即`.d.ts`中，这样不会影响核心代码，并且统一管理。默认项目编译时会查找所有以`.d.ts`结尾的文件。
+类型声明文件：一般情况下，我们会将 declare 声明的内容放置到类型声明文件中即 `.d.ts`中，这样不会影响核心代码，并且统一管理。默认项目编译时会查找所有以 `.d.ts`结尾的文件。
 
 ```ts
 // global.d.ts
@@ -1166,8 +1130,3 @@ npm install @types/jquery -S // 查找node_modules/@types/jquery/index.d.ts
 ```
 
 三斜线指令就是声明文件中的导入语句，用于**声明当前的文件依赖的其他类型声明**。
-
-
-
-
-

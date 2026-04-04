@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="module">
+        import { createElement, createTextNode } from "./h.js";
+        import { patch } from "./patch.js";
+
+        // 虚拟节点就是一个对象，描述真实节点
+        const vnode1 = createElement(
+            "div",
+            { style: { color: "red" }, key: "a" },
+            createElement('p', { key: 'a' }, createTextNode('a')),
+            createElement('p', { key: 'b' }, createTextNode('b')),
+            createElement('p', { key: 'c' }, createTextNode('c')),
+            createElement('p', { key: 'd' }, createTextNode('d'))
+            // createElement("span", {}, createTextNode("hello")),
+            // createTextNode("hello")
+        );
+        // const vnode1 = createTextNode("111")
+        patch(app, vnode1); // 初次渲染
+
+        const vnode2 = createElement(
+            "div",
+            { style: { color: "blue" }, key: "a" },
+            createElement('p', { key: 'b' }, createTextNode('b')),
+            createElement('p', { key: 'm' }, createTextNode('m')),
+            createElement('p', { key: 'a' }, createTextNode('a')),
+            createElement('p', { key: 'c' }, createTextNode('c')),
+            createElement('p', { key: 'q' }, createTextNode('q')),
+            // createElement("span", {}, createTextNode("hello")),
+            // createTextNode("world")
+        );
+        // const vnode2 = createTextNode("1222")
+
+        setTimeout(() => {
+            patch(vnode1, vnode2); // 用diff算法对比vnode2和vnode1，更新vnode1上的元素
+        }, 1000)
+    </script>
+</body>
+
+</html>

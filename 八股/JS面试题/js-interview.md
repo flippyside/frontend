@@ -192,7 +192,8 @@ function asnycJob() {
 - 而 Javascript 实际应用中的柯里化函数，可以传递一个或多个参数。
 
 例子：柯里化函数 `_fn`
-- 当接收的参数数量与原函数的形参数量相同时，执行原函数； 
+
+- 当接收的参数数量与原函数的形参数量相同时，执行原函数；
 - 当接收的参数数量小于原函数的形参数量时，返回一个函数用于接收剩余的参数，直至接收的参数数量与形参数量一致，执行原函数。
 
 ```js
@@ -210,6 +211,7 @@ _fn(1)(2)(3)(4)(5); // print: 1,2,3,4,5
 ```
 
 柯里化的用途：通过参数复用，使得代码更简洁、直观
+
 - 正则检验，比如校验电话号码、校验邮箱、校验身份证号、校验密码等。
 
 ```js
@@ -236,6 +238,7 @@ checkEmail('test@gmail.com'); // 校验邮箱
 ### 实现 curry 函数
 
 思路：“递归收集参数”的过程：
+
 - 每次调用都累积参数
 - 判断参数是否足够
   - 不够 → 继续返回函数（递归）
@@ -278,10 +281,10 @@ function _curry(fn, len, ...args) {
 占位符所在的位置由下次调用的参数来填充
 
 思路：
+
 - 对于 lodash 的 curry 函数来说，curry 函数挂载在 lodash 对象上，所以将 lodash 对象当做默认占位符来使用。
 - 而我们的自己实现的 curry 函数，本身并没有挂载在任何对象上，所以将 curry 函数当做默认占位符
 - 使用占位符，目的是改变参数传递的顺序，所以在 curry 函数实现中，每次需要记录是否使用了占位符，并且记录占位符所代表的参数位置。
-
 
 ```js
 /**
@@ -339,8 +342,6 @@ function _curry(fn,length,holder,args,holders){
     }
 }
 ```
-
-## js 的垃圾回收
 
 ## undefined、null 的区别
 
@@ -415,6 +416,46 @@ solution：
 - Array.prototype.concat.apply([], arrayLike)
 
 ## 数组的原生方法
+
+1. **修改原数组的方法（Mutator Methods）**
+
+这些方法会改变原有的数组对象。
+
+* push() ：在数组末尾添加元素，返回新长度。
+* pop() ：删除数组最后一个元素，返回该元素。
+* unshift() ：在数组开头添加元素，返回新长度。
+* shift()：删除数组第一个元素，返回该元素。
+* splice() ：从指定位置添加/删除元素，用于增删改操作。
+* sort() ：对数组元素进行排序。
+* reverse() ：颠倒数组中元素的顺序。
+* fill() ：用固定值填充数组。
+
+2. **不改变原数组的方法（Accessor Methods）**
+
+这些方法会返回一个新数组或数值，原数组保持不变。
+
+* concat()：合并两个或多个数组。
+* slice()：返回数组的浅拷贝切片。
+* join()：将数组元素连接为字符串。
+* indexOf()/ lastIndexOf()：查找元素索引。
+* includes()：判断数组是否包含特定值。
+* toString()：返回数组的字符串表示。
+
+3. **数组遍历与迭代方法（Iteration Methods）**
+
+* forEach()：对每个元素执行一次操作
+* map()：创建一个新数组，其结果是该数组中的每个元素调用一次函数。
+* filter()：创建一个新数组，包含通过测试的所有元素。
+* reduce()：归并数组为单个值。
+* find()：查找满足条件的第一个元素或索引。
+* some()：测试是否至少有一个元素通过测试。
+* every()：测试是否所有元素通过测试。
+
+4. **静态方法**
+
+* Array.isArray()：判断一个值是否为数组。
+* Array.from()：将类数组对象转为真正数组。
+* Array.of()：将一组值转换为数组。
 
 ## substring 和 substr 的区别
 
@@ -504,6 +545,10 @@ ES6 的尾调用只能在严格模式下开启
 ![alt text](../assets/ajax/image.png)
 
 ## 如何实现深浅拷贝
+
+浅拷贝：直接拷贝地址
+
+深拷贝：拷贝对象
 
 实现深拷贝：
 
@@ -703,21 +748,168 @@ child1.sayAge(); // 18
 
 ES6 中的块级作用域：只在代码块中访问使用
 
-- 使用 ES6 中新增的 let、const 什么的变量，具备块级作用域，块级作用域可以在函数中创建（由{}包裹的代码都是块级作用域）
+- 使用 ES6 中新增的 let、const 变量，具备块级作用域，块级作用域可以在函数中创建（由{}包裹的代码都是块级作用域）
 - let、const 申明的变量不会变量提升，const 也不能重复申明
 - 块级作用域主要用来解决由变量提升导致的变量覆盖问题
 
 作用域链：变量在指定的作用域中没有找到，会依次向一层作用域进行查找，直到全局作用域。这个查找的过程被称为作用域链。
 
-## bind
+## bind()
+
+bind用于将函数内的this指向目标对象：
+
+```js
+f.bind(obj)  // 等价于obj.f()
+```
+
+bind() 的第一个参数赋给新函数的 this，其余参数将作为新函数的参数，供调用时使用。
+
+bind使用场景：解决this指向不符合预期的问题。例如，write方法的this指向的是 document对象，赋值给 altwrite，altwrite没有通过调用就直接执行，this的指向global或window对象。
+
+```js
+// 将document的write方法赋给altwrite
+let altwrite = document.write
+
+altwrite('hello') // Uncaught TypeError: Illegal invocation
+```
+
+`bind()` 将altwrite 中的this指向 document对象，然后传入参数执行：
+
+```js
+// 将document的write方法赋值
+let altwrite = document.write
+
+altwrite.bind(document)("hello") // 等价于：altwrite.call(document, "hello")
+```
+
+实现bind：
+
+```js
+// 不可传参的bind
+Function.prototype.my_bind = function(context){
+    var self = this;
+    return function(){
+        self.apply(context, arguments);
+    }
+}
+```
+
+```js
+// 使用例
+function a(){
+    console.log(this.name);
+}
+var b = { name: 'apple' };
+a.bind(b); // apple
+a.my_bind(b); // apple
+```
+
+```js
+// 可传参的bind
+Function.prototype.my_bind = function(){
+    var self = this; // 原函数
+    var context = Array.prototype.shift.call(argument); // 要绑定的this上下文
+    var args = Array.prototype.concat.call(argument); // 剩余参数
+    return function(){
+        self.apply(context, Array.prototype.concat.call(args, Array.prototype.slice.call(arguments)));
+    }
+}
+```
+
+```js
+// 使用例
+function func(a, b ,c){
+    console.log(this.name + a + b + c);
+}
+var b = { name: 'apple' };
+a.my_bind(b, 1, 2)(3); // apple123
+```
+
+## call()
+
+call用于执行函数，可改变this的指向、传入参数。
+
+```js
+// thisArg：func运行时this指向的对象
+func.call(thisArg, arg1, arg2, ...)
+```
+
+如果this为undefined或null，在非严格模式下，call函数会将this指向全局对象（window或global）。
+
+实现call：
+
+- 将传入的fn作为thisArg的私有方法，使fn可以在this指向thisArg的情况下执行
+- 通过arguments截取连续传入的不定量的参数
+- 执行fn，获得执行结果
+- 删除临时挂在thisArg的fn方法
+- 返回执行结果
+
+```js
+Function.prototype.my_call = function (context = window) {
+  let _context = context // 第一个参数不传默认为全局对象window
+  _context.fn = this // 将foo作为thisArg的私有方法, this改变
+  const args = [...arguments].slice(1) // 截取下标从1开始的参数 {'param1', 'param2'}
+  const result = _context.fn(...args) // 调用方法，并传递参数
+  delete _context.fn
+  return result
+}
+```
+
+使用例：
+
+```js
+let target = {
+  value: 'apple'
+}
+function foo(param1, param2) {
+  console.log(param1)
+  console.log(param2)
+  console.log(this.value)
+}
+foo.my_call(target, '1', '2') // 1 2 apple
+```
+
+## apply()
+
+apply与call基本一致，除了apply的参数为数组形式。
+
+```js
+// thisArg：func运行时this指向的对象
+func.apply(thisArg, [argsArray])
+``
+
+实现apply：
+
+```js
+Function.prototype.my_apply = function(context = window, arr){
+  let _context = context // 第一个参数不传默认为全局对象window
+  _context.fn = this // 将foo作为thisArg的私有方法, this改变
+  const result = arr.length ? _context.fn(...args) : _context.fn()// 调用方法，并传递参数
+  delete _context.fn
+  return result
+}
+```
 
 ## call() 、bind（）、 apply() 的联系与区别
 
-相同点：可以改变 this 指向
+```js
+/**
+ @params: targetThis  (可选) fn的this的目标指向，默认指向window
+ @params: param (可选) 传入fn的参数
+*/
+fn.bind(targetThis, param1, param2, param3..)
+fn.call(targetThis, param1, param2, param3 ...)
+fn.apply(targetThis, [param1, param2, param3 ...])
+```
+
+相同点：都可以改变 this 指向，显式指定函数的执行上下文。
 
 区别：
 
+![1774968184487](image/js-interview/1774968184487.png)
+
 - 参数：call、bind 传入对象，apply 传入一个数组
-- call、apply 改变 this 指向后会立即执行函数，bind 在改变 this 后返回一个函数，不会立即执行函数，需要手动调用。
+  - call适用参数数量固定的场景，apply适用参数数量不确定的场景
+- call、apply 改变 this 指向后会立即执行函数，bind 在改变 this 后返回一个新函数，不会立即执行函数，需要手动调用。
 
 连续多个 bind，最后 this 指向是什么：在 JavaScript 中，连续多次调用 bind 方法，最终函数的 this 上下文是由第一次调用 bind 方法的参数决定的

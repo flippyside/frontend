@@ -317,8 +317,8 @@ computed 和 watch 之间的区别：
   - 适用于：切换频率较低的场景。
   - 特点：不展示的 DOM 元素直接被移除。
   - 注意：v-if 可以和:v-else-if、v-else 一起使用，但要求结构不能被“打断”。
-
 - v-show
+
   - 写法：v-show="表达式"
   - 适用于：切换频率较高的场景。
   - 特点：不展示的 DOM 元素未被移除，仅仅是使用样式隐藏掉
@@ -393,7 +393,6 @@ new Vue({
 - (1).bind：指令与元素成功绑定时调用。
 - (2).inserted：指令所在元素被插入页面时调用。
 - (3).update：指令所在模板结构被重新解析时调用。
-
 - 使用指令：`v-my-directive='xxx'`
 
 ## 组件化
@@ -448,7 +447,7 @@ const school = Vue.extend({
     <div class="demo">
       <h2>学校名称：{{schoolName}}</h2>
       <h2>学校地址：{{address}}</h2>
-      <button @click="showName">点我显示学校名</button>	
+      <button @click="showName">点我显示学校名</button>
     </div>
   `,
   // el:'#root',
@@ -510,9 +509,9 @@ new Vue({
     - 第一种写法(kebab-case 命名)：my-school
     - 第二种写法(CamelCase 命名)：MySchool (需要 Vue 脚手架支持)
 - 2.关于组件标签:
-  - 第一种写法：<school></school>
-  - 第二种写法：<school/>
-  - 备注：不用使用脚手架时，<school/>会导致后续组件不能渲染。
+  - 第一种写法：`<school></school>`
+  - 第二种写法：`<school/>`
+  - 备注：不用使用脚手架时，`<school/>`会导致后续组件不能渲染。
 - 3.一个简写方式：
   - const school = Vue.extend(options) 可简写为：const school = options
 
@@ -521,7 +520,7 @@ new Vue({
 关于 VueComponent：
 
 - 1.school 组件本质是一个名为 VueComponent 的构造函数，且不是程序员定义的，是 Vue.extend 生成的。
-- 2.我们只需要写<school/>或<school></school>，Vue 解析时会帮我们创建 school 组件的实例对象，即 Vue 帮我们执行的：new VueComponent(options)。
+- 2.我们只需要写`<school/>`或`<school></school>`，Vue 解析时会帮我们创建 school 组件的实例对象，即 Vue 帮我们执行的：new VueComponent(options)。
 - 3.特别注意：每次调用 Vue.extend，返回的都是一个**全新的** VueComponent！！！！
 - 4.关于 this 指向：
   - (1).组件配置中：data 函数、methods 中的函数、watch 中的函数、computed 中的函数 它们的 this 均是【VueComponent 实例对象】。
@@ -535,16 +534,16 @@ new Vue({
 - vueComponent 的原型对象的原型链指向 Vue 的原型对象
 - 作用：让组件实例对象（vc）能继承 Vue 的所有方法和特性
 
-![alt text](<assets/vue-note/未命名作品 5.png>)
+![alt text](assets/vue-note/未命名作品 5.png)
 
 原型对象：
 
 - `prototype`（显式原型属性）：构造函数的原型对象（定义共享方法的地方）
 - `__proto__`（隐式原型属性）：实例或原型的原型指针（连接原型链）
 
-| Java 面向对象里的概念 | JavaScript 里的等价物                |
-| --------------------- | ------------------------------------ |
-| 类（Class）           | 构造函数（Constructor）              |
+| Java 面向对象里的概念 | JavaScript 里的等价物                  |
+| --------------------- | -------------------------------------- |
+| 类（Class）           | 构造函数（Constructor）                |
 | 实例（Instance）      | 用 `new` 创建的对象                  |
 | 类的方法              | 定义在构造函数 `.prototype` 上的方法 |
 | 继承                  | 通过原型链（`__proto__`）实现        |
@@ -590,7 +589,7 @@ export default {
 };
 ```
 
-注意：vue2 中，模板（<template>）必须只有一个根元素。因为 Vue2 的虚拟 DOM 树要求每个组件对应一个唯一的“根节点”
+注意：vue2 中，模板（`<template>`）必须只有一个根元素。因为 Vue2 的虚拟 DOM 树要求每个组件对应一个唯一的“根节点”
 
 ---
 
@@ -613,7 +612,7 @@ Vue.config.productionTip = false;
 
 /* 
 	关于不同版本的Vue：
-	
+
 		1.vue.js与vue.runtime.xxx.js的区别：
 				(1).vue.js是完整版的Vue，包含：核心功能+模板解析器。
 				(2).vue.runtime.xxx.js是运行版的Vue，只包含：核心功能；没有模板解析器。
@@ -642,6 +641,7 @@ new Vue({
       ....
   }
   ```
+
   第二步使用混入：
   全局混入：在 main.js 中 `Vue.mixin(xxx)`
   局部混入：在组件文件中 `mixins:['xxx']	`
@@ -671,9 +671,7 @@ new Vue({
        Vue.prototype.$myProperty = xxxx
    }
    ```
-
 4. 使用插件：在 main.js 中 `Vue.use(plugins, ...)`
-
 
 ---
 
@@ -967,8 +965,6 @@ count.value++;
 
 ```
 
-
-
 监听props：
 
 - Vue 推荐用箭头函数的方式访问 props，而不是直接写 props.selectedKeys。（原因：watch 的第一个参数必须是 reactive/ref 或者一个 getter 函数。 props 本身不是 reactive 对象，它是被代理过的。 直接传 props.selectedKeys 不是响应式引用，会导致失效。）
@@ -993,8 +989,6 @@ watch(
 ```js
 { deep: true }
 ```
-
-
 
 ### 组合式 API
 
@@ -1242,8 +1236,6 @@ emit('update', '新数据')
 
 ```
 
-
-
 component 是一个动态组件，is 属性决定它的标签
 
 ### 网页渲染
@@ -1441,7 +1433,7 @@ const attrs = useAttrs();
 </template>
 ```
 
-语法：`v-bind:`或简写为`:`
+语法：`v-bind:`或简写为 `:`
 
 ### 双向数据绑定
 
@@ -1629,7 +1621,7 @@ stuStore.$reset();
 - 使用方式：`store.$subscribe(函数, 配置对象)`
 - 使用订阅时不要在回调函数中直接修改 state, 否则可能触发死循环
 
-detached：为 false 时，若订阅的 store 的`v-show=false`，就不响应；为 true 时，会响应
+detached：为 false 时，若订阅的 store 的 `v-show=false`，就不响应；为 true 时，会响应
 
 ```js
 stuStore.$subscribe(
@@ -1682,7 +1674,7 @@ stuStore.$subscribe(
 常用的生命周期钩子：
 
 - 1.mounted: 发送 ajax 请求、启动定时器、绑定自定义事件、订阅消息等【初始化操作】。
-  - Vue 第一次完成模板的解析并把初始的真实 DOM 元素放入页面后（即，挂载完毕），会调用`mounted`函数
+  - Vue 第一次完成模板的解析并把初始的真实 DOM 元素放入页面后（即，挂载完毕），会调用 `mounted`函数
 - 2.beforeDestroy: 清除定时器、解绑自定义事件、取消订阅消息等【收尾工作】。
 
 关于销毁 Vue 实例
@@ -1760,7 +1752,6 @@ Vue 中借助 router-link 标签实现路由的切换：
      },
    ];
    ```
-
 2. 跳转（要写完整路径）：
 
    ```vue
@@ -1771,7 +1762,7 @@ Vue 中借助 router-link 标签实现路由的切换：
 
 - 作用：可以简化路由的跳转。
 
-1.  给路由命名：
+1. 给路由命名：
 
 ```js
 {
@@ -1793,7 +1784,7 @@ Vue 中借助 router-link 标签实现路由的切换：
 }
 ```
 
-2.  简化跳转：
+2. 简化跳转：
 
 ```vue
 <!--简化前，需要写完整的路径 -->
@@ -1840,13 +1831,12 @@ Vue 中借助 router-link 标签实现路由的切换：
    	]
    }
    ```
-
 2. 传递参数
 
    ```vue
    <!-- 跳转并携带params参数，to的字符串写法 -->
    <router-link :to="/home/message/detail/666/你好">跳转</router-link>
-   
+
    <!-- 跳转并携带params参数，to的对象写法 -->
    <router-link
      :to="{
@@ -1900,7 +1890,7 @@ Vue 中借助 router-link 标签实现路由的切换：
 
 - push 模式：通过栈来记录网页的历史记录。每次点进新网页，就是一次压栈；每次点击后退，就是一次出栈
 
-可以通过向`<router-link>`添加 replace 属性来将浏览器历史记录的模式改为替换当前（栈顶的）记录
+可以通过向 `<router-link>`添加 replace 属性来将浏览器历史记录的模式改为替换当前（栈顶的）记录
 
 ```js
 <router-link replace .......>News</router-link>
@@ -1949,9 +1939,8 @@ this.$router.go(); //可前进也可后退
 
 路由组件所独有的两个钩子，用于捕获路由组件的激活状态。
 
-1.  `activated`：路由组件被激活时触发。
-
-2.  `deactivated`：路由组件失活时触发。
+1. `activated`：路由组件被激活时触发。
+2. `deactivated`：路由组件失活时触发。
 
 ### 路由守卫
 
@@ -1981,7 +1970,7 @@ this.$router.go(); //可前进也可后退
       next(); //放行
     }
   });
-  
+
   //全局后置守卫：初始化时执行、每次路由切换后执行
   router.afterEach((to, from) => {
     console.log("afterEach", to, from);
@@ -2010,7 +1999,6 @@ this.$router.go(); //可前进也可后退
    	}
    }
    ```
-
 3. 组件内守卫：
 
    ```js
@@ -2041,7 +2029,7 @@ this.$router.go(); //可前进也可后退
 
 - 项目文件夹内执行：`npm init`
 - 执行：`npm i express`
-- 新建 static 文件夹，存放前端代码`yarn build`构建的 dist 文件夹下的文件
+- 新建 static 文件夹，存放前端代码 `yarn build`构建的 dist 文件夹下的文件
 - 新建 `server.js` 文件：
 
 ```js
@@ -2065,7 +2053,7 @@ app.listen(5005, (err) => {
 });
 ```
 
-2. 执行`node server` 启动服务器，访问`http://localhost:5005/`（等同于/index.html）
+2. 执行 `node server` 启动服务器，访问 `http://localhost:5005/`（等同于/index.html）
 
 项目目录如下：
 ![alt text](assets/vue-note/image-3.png)
