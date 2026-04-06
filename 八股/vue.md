@@ -129,6 +129,8 @@ const store = createStore({
 
 ## mvvm 和 mvc 区别是什么
 
+MVC：Model-View-Controller，数据-视图-控制器，通常是全栈开发，视图的变化后，由控制器来操作数据，然后手动渲染到视图。
+
 MVVM：Model - View - View Model
 
 - 模型 Model：应用的数据及业务逻辑。对应 data 中的数据
@@ -248,7 +250,7 @@ computed 和 watch 之间的区别：
 推荐写法：
 
 - 1. 先过滤数据，再使用v-for
-- 2. 利用`<template>`元素，将 v-if 放在 v-for 的子元素中
+- 2. 利用 `<template>`元素，将 v-if 放在 v-for 的子元素中
 
 ```js
     <template v-for="todo in todos" :key="todo.id">
@@ -316,11 +318,7 @@ history特点：
 
 ## 讲讲 Vue 的虚拟 DOM，原理，好处是什么？相对于手动操作 DOM，性能更好吗
 
-
-
 > Virtual Dom(vdom，虚拟DOM)：用于描述真实dom节点的JavaScript对象。
-
-
 
 - 虚拟dom本质上是js对象,是对真实dom的抽象,在状态变化时,记录新树和旧树的差异,最后把差异更新到真实dom中
 - 轻量级的抽象层，对应于真实DOM的结构，包含了与真实DOM相同的层次结构、属性和内容信息
@@ -328,6 +326,7 @@ history特点：
 - 只存在于内存中，并不直接渲染到浏览器中
 
 优缺点:
+
 - 虚拟dom能保证下限,通过diff算法找出最小差异,然后批量patch,这样虽比不上手动优化,但相较于粗暴的dom操作性能要好很多,保证了性能
 - 无需手动操作
 - 跨平台: 虚拟DOM本质上是JavaScript对象,而DOM与平台强相关,相比之下虚拟DOM可以进行更方便地跨平台操作,例如服务器渲染、移动端开发等等
@@ -342,6 +341,7 @@ history特点：
 虚拟 DOM 的更新：通过对比前后两个虚拟 DOM 树的差异，然后将差异部分应用到真实 DOM 上，从而减少直接操作真实 DOM 的次数。
 
 与真实 DOM 相比，虚拟 DOM 具有以下区别：
+
 - 效率：虚拟 DOM 可以减少对真实 DOM 的直接操作次数，通过一次虚拟 DOM 的比较和更新，来代替多次的直接 DOM 操作。由于虚拟 DOM 可以批量处理更新，它通常能提供更好的性能表现。
 - 批量更新：虚拟 DOM 可以将多个更新操作批量处理，最终只触发一次真实 DOM 的更新。相比之下，直接操作真实 DOM 往往需要立即进行更新，这可能导致多次无谓的重排和重绘。
 - 反应式编程：虚拟 DOM 结合了反应式编程的思想，通过声明式的方式描述 UI，并自动处理 UI 的更新。React 和其他虚拟 DOM 库提供了基于组件的开发模式，使得构建复杂交互界面更加简单、高效。
@@ -354,12 +354,12 @@ history特点：
 ### 虚拟 DOM 的工作原理
 
 可以概括为以下几个步骤：
+
 - 初始渲染：当应用程序加载时，首先进行一次初始渲染，将虚拟 DOM 结构构建出来。虚拟 DOM 是由 JavaScript 对象构成的树形结构，它对应于真实 DOM 的层次结构。
 - 更新生成新虚拟 DOM：当应用程序的状态发生变化时（比如用户交互），需要更新 UI。这时会生成一个新的虚拟 DOM 树，新的虚拟 DOM 表示了更新后的 UI 状态。
 - 对比差异：将新的虚拟 DOM 树与之前的虚拟 DOM 树进行对比，找出两者之间的差异（即哪些节点需要被更新、添加或删除）。这个对比过程的算法被称为"Diffing"。
 - 生成更新：根据对比得出的差异，生成一个表示更新操作的"补丁"（Patch）对象。该补丁对象包含了需要修改真实 DOM 的具体操作，比如添加节点、删除节点、更新属性等。
 - 应用更新：将补丁对象应用到真实 DOM 上，即将所有的变更操作一次性地应用到真实 DOM 上，从而实现 UI 的更新。这个过程通常使用最小化 DOM 操作的方式进行，以提高性能。
-
 
 ## 说说 Vue 的 keep-alive(组件缓存) 使用及原理
 
@@ -372,8 +372,9 @@ keep-alive：vue的一个内置组件。作用是缓存组件，让其不被销�
 ### 实现 keep-alive 组件
 
 created、destroyed钩子：
- - created：创建一个cache，用来做缓存容器，保存vnode节点
- - destroyed：在组件被销毁时，清除cache里的组件实例
+
+- created：创建一个cache，用来做缓存容器，保存vnode节点
+- destroyed：在组件被销毁时，清除cache里的组件实例
 
 render钩子：首先通过getFirstComponentChild获取第一个子组件，获取该组件的name（存在组件名则直接使用组件名，否则会使用tag）。接下来会将这个name通过include与exclude属性进行匹配，匹配不成功（说明不需要进行缓存）则不进行任何操作直接返回vnode，vnode是一个VNode类型的对象
 
@@ -432,7 +433,6 @@ activated, deactivated 是组件keep-alive时独有的钩子
 
 ![1775049240951](image/vue/1775049240951.png)
 
-
 ## Vue 父子组件生命周期触发顺序是怎样的
 
 顺序：父组件先创建，然后子组件创建；子组件先挂载，然后父组件挂载。
@@ -442,21 +442,25 @@ activated, deactivated 是组件keep-alive时独有的钩子
 ```
 
 加载渲染过程：
+
 ```
 父beforeCreate->父created->父beforeMount->子beforeCreate->子created->子beforeMount->子mounted->父mounted
 ```
 
 更新过程：
+
 ```
 父beforeUpdate->子beforeUpdate->子updated->父updated
 ```
 
 销毁过程：
+
 ```
 父beforeDestroy->子beforeDestroy->子destroyed->父destroyed
 ```
 
 常用钩子简易版：
+
 ```
 父create->子created->子mounted->父mounted
 ```
@@ -475,8 +479,8 @@ activated, deactivated 是组件keep-alive时独有的钩子
 
 ## Vue.nextTick 的实现
 
-使用`Vue.nextTick()`是为了可以获取更新后的DOM 。
-触发时机：在同一事件循环中的数据变化后，DOM完成更新，立即执行`Vue.nextTick()`的回调。
+使用 `Vue.nextTick()`是为了可以获取更新后的DOM 。
+触发时机：在同一事件循环中的数据变化后，DOM完成更新，立即执行 `Vue.nextTick()`的回调。
 
 > 同一事件循环中的代码执行完毕 -> DOM 更新 -> nextTick callback触发
 
@@ -492,11 +496,11 @@ activated, deactivated 是组件keep-alive时独有的钩子
 
 背景：当我们更新了状态(数据)的时候，需要立即对更新的 DOM 进行一些操作，但是此时，我们是获取不到更新后的 DOM 的，因为在本次的更新操作当中，DOM 并没有立即更新。Vue在修改数据后，视图不会立刻更新，而是等**同一事件循环**中的所有数据变化完成之后，再统一进行视图更新。
 
-解决方案：使用`nextTick`方法。
+解决方案：使用 `nextTick`方法。
 
 ![img](https://pica.zhimg.com/v2-2431bed1bef1661c58e9049f47eecf44_1440w.jpg)
 
-`tick`：主线程的执行过程就是一个`tick`，而所有的异步结果都是通过任务队列来调度。`Event Loop` 分为宏任务和微任务，无论是执行宏任务还是微任务，完成后都会进入到一下`tick`，**并在两个`tick`之间进行UI渲染**。
+`tick`：主线程的执行过程就是一个 `tick`，而所有的异步结果都是通过任务队列来调度。`Event Loop` 分为宏任务和微任务，无论是执行宏任务还是微任务，完成后都会进入到一下 `tick`，**并在两个 `tick`之间进行UI渲染**。
 
 `nextTick`：在下次 DOM 更新后执行回调。在修改数据之后立即使用这个方法，以获取更新后的 DOM。
 
@@ -523,7 +527,7 @@ new Vue({
 
 ### 下次DOM更新是什么时候？
 
-vue中，状态发生改变 --> 通知`watcher` --> `watcher`通知页面发生更新 --> 触发虚拟DOM的patch流程 --> 更新页面视图
+vue中，状态发生改变 --> 通知 `watcher` --> `watcher`通知页面发生更新 --> 触发虚拟DOM的patch流程 --> 更新页面视图
 
 注意， `Watcher` 触发虚拟 Dom 的流程是异步的，Vue 当中有一个队列，每当需要渲染时，会将 `Watcher` 推送到这个队列当中（如果队列当中已经有相同的 `Watcher` 则不添加），在下次事件循环中让 `Watcher` 触发渲染流程。
 
@@ -531,19 +535,17 @@ vue中，状态发生改变 --> 通知`watcher` --> `watcher`通知页面发生�
 
 原理：利用事件循环来进行异步操作，然后等 vue 的事件循环结束之后，再执行回调函数。
 
-- 能力检测：检查可以使用的延迟调用方式，记为`timerFunc`
+- 能力检测：检查可以使用的延迟调用方式，记为 `timerFunc`
   - 优先级：Promise --> MutationObserver --> setImmediate --> setTimeout。
   - nextTick 优先使用Promise和MutationObserver，因为他俩属于微任务，会在执行栈空闲的时候立即执行，响应速度比setTimeout更快，因为无需等渲染。而setImmediate和setTimeout属于宏任务，执行开始之前要等渲染，即task->渲染->task。
 - 假设Promise可以使用，`nextTick` 会通过 `Promise.resolve()`来创建一个成功的 `Promise`，然后再通过 `Promise.then()`或者其他方式将回调函数添加入微任务队列。
-- 设置状态锁`pedding`，通过`pedding`来判断当前队列当中是否已经存在一个`nextTick`的任务，避免多次执行`nextTick`的任务
+- 设置状态锁 `pedding`，通过 `pedding`来判断当前队列当中是否已经存在一个 `nextTick`的任务，避免多次执行 `nextTick`的任务
 
 **核心流程**：
 
-- 把传入的回调函数`cb`压入`callbacks`数组
-- 执行`timerFunc`函数，延迟调用 `flushCallbacks` 函数
+- 把传入的回调函数 `cb`压入 `callbacks`数组
+- 执行 `timerFunc`函数，延迟调用 `flushCallbacks` 函数
 - 遍历执行 `callbacks` 数组中的所有函数
-
-
 
 ```js
 // 存放回调函数的数组
@@ -668,13 +670,8 @@ export function nextTick(cb, ctx) {
 }
 ```
 
-
-
 ## 讲讲 Vue diff 算法
 
-背景：`vue`节点的更新方式是对`vdom`进行比较。当更新前的容器中的内容是一组子节点时，且更新后的内容仍是一组节点。如果不采用`diff`算法，那么最简单的操作就是将之前的`dom`全部卸载，再将当前的新节点全部挂载。但是直接操作dom对象是非常耗费性能的。
-
-
+背景：`vue`节点的更新方式是对 `vdom`进行比较。当更新前的容器中的内容是一组子节点时，且更新后的内容仍是一组节点。如果不采用 `diff`算法，那么最简单的操作就是将之前的 `dom`全部卸载，再将当前的新节点全部挂载。但是直接操作dom对象是非常耗费性能的。
 
 diff算法：找出两组vdom节点之间的差异，并尽可能的复用dom节点，降低更新操作的性能消耗。
-

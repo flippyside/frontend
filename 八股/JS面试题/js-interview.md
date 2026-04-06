@@ -17,16 +17,18 @@ JS 是单线程的，运行基于事件循环机制(event loop)：对于异步�
 
 任务队列分为：
 
-- 宏任务队列 （大部分代码都去宏任务队列中去排队，例如 script、I/O）
+- 宏任务队列 （大部分代码都去宏任务队列中去排队，例如 setTimeout、script、I/O）
 - 微任务队列 （Promise 的回调函数（then、catch、finally））
   - queueMicrotask() : 向微任务队列中添加一个任务
+
+宏任务通常不太紧急，微任务通常比较紧急且相关性较强
 
 Promise 的执行原理
 
 - Promise 在执行，then 就相当于给 Promise 了回调函数
   - 当 Promise 的状态从 pending 变为 fulfilled 时，then 的回调函数会被放入到任务队列中
 
-流程：主线程任务 ——> 微任务 ——> 宏任务
+流程：**主线程任务 ——> 微任务 ——> 宏任务**
 
 ## js 的数据类型
 
@@ -44,13 +46,26 @@ ES6 新增两种：symbol、bigint：
 
 ## this
 
-js 中 this 的指向取决于调用时的上下文。全局作用域中 this 指向全局对象（浏览器为 window，Node.js 为 global）。函数中 this 由调用方式决定：通过对象调用时指向该对象，直接调用时指向全局对象。构造函数中 this 指向新创建的实例，事件处理器中 this 指向触发事件的元素。
+this：谁来调用就是谁，即，当前执行这个逻辑的主题是谁，亦即，`.`前是谁
 
-this 是在创建函数的执行环境时，在创建阶段确定的。
+如果没有 `.`调用：
+
+- 非严格模式：默认window调用
+- 严格模式：undefined
+
+具体来说，js 中 this 的指向取决于调用时的上下文。
+
+- 全局作用域中 this 指向全局对象（浏览器为 window，Node.js 为 global）。
+- 函数中 this 由调用方式决定：通过对象调用时指向该对象，直接调用时指向全局对象。
+- 构造函数中 this 指向新创建的实例，
+- 事件绑定时，this指向绑定的元素
+- 事件处理器中 this 指向触发事件的元素。
+
+this 是在创建函数的执行上下文时确定的。
 
 判断 this 指向：
 
-- 如果()左边是一个引用(reference),那么，函数的 this 指向的就是这个引用所属的对象。例如 `foo.func();`
+- 如果 `.`左边是一个引用(reference),那么，函数的 this 指向的就是这个引用所属的对象。例如  `foo.func();`
 - 否则 this 指向的就是全局对象(window|global)。例如 `func();`
 
 ## 箭头函数与普通函数的区别
@@ -913,3 +928,22 @@ fn.apply(targetThis, [param1, param2, param3 ...])
 - call、apply 改变 this 指向后会立即执行函数，bind 在改变 this 后返回一个新函数，不会立即执行函数，需要手动调用。
 
 连续多个 bind，最后 this 指向是什么：在 JavaScript 中，连续多次调用 bind 方法，最终函数的 this 上下文是由第一次调用 bind 方法的参数决定的
+
+## call和apply的区别是什么？哪个性能更高
+
+call性能更高。
+
+两者都可以改变this后执行函数，区别是：
+- call参数是依次传入
+- apply参数以数组形式传入
+
+```js
+Function.prototype.call = function (obj, ...args) {
+    const context = obj
+    const fn = Symbol()
+    context[fn] = this
+    const result = context[fn](...args)
+    delete context[fn]
+    return result
+}
+```
