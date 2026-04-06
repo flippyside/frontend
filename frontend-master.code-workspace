@@ -1,0 +1,29 @@
+{
+    "folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../BigData"
+		},
+		{
+			"name": ".leetcode",
+			"path": "C:/Users/petunia/.leetcode"
+		},
+		{
+			"path": "../23-24/al"
+		},
+		{
+			"path": "../core-main"
+		},
+		{
+			"path": "../vue-rabbit-main"
+		},
+		{
+			"path": "../YXUI-main"
+		}
+	],
+    "settings": {
+        "liveServer.settings.multiRootWorkspaceName": "frontend-master"
+    }
+}
