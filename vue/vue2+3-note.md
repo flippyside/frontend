@@ -659,13 +659,13 @@ new Vue({
    对象.install = function (Vue, options) {
        // 1. 添加全局过滤器
        Vue.filter(....)
-
+   
        // 2. 添加全局指令
        Vue.directive(....)
-
+   
        // 3. 配置全局混入(合)
        Vue.mixin(....)
-
+   
        // 4. 为Vue原型添加实例方法
        Vue.prototype.$myMethod = function () {...}
        Vue.prototype.$myProperty = xxxx
@@ -1836,7 +1836,7 @@ Vue 中借助 router-link 标签实现路由的切换：
    ```vue
    <!-- 跳转并携带params参数，to的字符串写法 -->
    <router-link :to="/home/message/detail/666/你好">跳转</router-link>
-
+   
    <!-- 跳转并携带params参数，to的对象写法 -->
    <router-link
      :to="{
@@ -1970,7 +1970,7 @@ this.$router.go(); //可前进也可后退
       next(); //放行
     }
   });
-
+  
   //全局后置守卫：初始化时执行、每次路由切换后执行
   router.afterEach((to, from) => {
     console.log("afterEach", to, from);

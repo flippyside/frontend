@@ -1,5 +1,3 @@
-**你不知道的 JavaScript**
-
 # javascript
 
 ## 执行上下文 Execution Context
@@ -648,7 +646,7 @@ function getValue(name, ec) {
 - DOM 0 级事件绑定：
 - DOM 2 级事件绑定：
 
-DOM 0 级事件绑定：
+**DOM 0 级事件绑定**：
 
 - 语法：`[元素].on[事件]=[函数]`
   - 绑定：`document.body.onclick = function(){}`
@@ -659,7 +657,7 @@ DOM 0 级事件绑定：
   - 没有的属性就无法绑定事件
   - 执行速度快，使用方便
 
-DOM 2 级事件绑定：
+**DOM 2 级事件绑定**：
 
 - 语法：`[元素].addEventListener([事件],[方法],[捕获/冒泡])`
   - 绑定：`document.body.addEventListener('click', fn1, false)`
@@ -687,4 +685,36 @@ DOM0 和 DOM2 区别：
   - DOM2 通常不使用匿名函数，以便后续移除
   - DOM0 可使用匿名函数，但移除时仍需引用
 
-![alt text](assets/js-珠峰基础-note/image.png)
+<img src="assets/js-珠峰基础-note/image.png" alt="alt text" style="zoom: 50%;" />
+
+### 事件对象
+
+
+
+事件对象：存储当前事件操作及触发的相关信息（浏览器本身记录的，记录的是当前这次操作的信息，与在哪个函数中无关）
+
+```js
+    <script>
+        let body = document.body
+        body.onclick = function (ev) {
+            console.log(ev); // 打印鼠标事件对象 MouseEvent
+        }
+        body.addEventListener('click', function (ev) {
+            console.log(ev);
+        })
+    </script>
+```
+
+鼠标事件对象
+
+- clientX/clientY
+- pageX/pageY
+- target/srcElement：获取当前事件源（当前操作的元素）
+- path：传播路径
+- `ev.preventDefault` / `ev.returnValue = false`：阻止默认行为
+- `ev.stopPropagation()` / `ev.cancelBubble = true`：阻止冒泡
+
+
+
+### 事件的传播机制
+

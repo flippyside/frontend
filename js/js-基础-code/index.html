@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            background: lightblue;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        let body = document.body
+        body.onclick = function (ev) {
+            console.log(ev); // 打印鼠标事件对象 MouseEvent
+        }
+        body.addEventListener('click', function (ev) {
+            console.log(ev);
+        })
+    </script>
+
+</body>
+
+</html>

@@ -22,3 +22,21 @@ vue没有严格遵循MVVM：
 
 vue的响应式原理 + vue的组件化的功能 + vue-router + vuex + vue-cli
 
+```js
+new Vue({
+    el: '#app',
+    render: h => h(App)
+})
+```
+
+ `render: h => h(App)`：告诉 Vue 要渲染哪个组件。
+
+- **`h`**：是 `createElement` 函数的简写（来自 `hyperscript` ），用于创建虚拟 DOM 节点。
+- **`h(App)`**：创建一个 `App` 组件的虚拟节点。
+- **最终效果**：将 `App` 组件渲染到 `#app` 容器中。
+
+使用 `render` 函数：
+
+- 在**运行时（runtime-only）** 构建下，不包含模板编译器，代码体积更小。
+- 直接处理虚拟 DOM，效率更高。
+- 可以更方便地使用 JSX 或动态组件。
