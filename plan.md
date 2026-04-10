@@ -26,31 +26,80 @@ timeline：
 - [ ] hot100 （大厂必须，中厂 小厂只要 js 手写就行）
 - [X] 项目 1：包装小兔鲜。包装一些性能优化 组件封装的东西 面试能聊一聊就够了
 - [X] 项目 2：组件库
-- [ ] 珠峰
+- [ ] 珠峰网课
+
   - [X] js基础
+  - [X] 函数式编程
   - [ ] js高级
   - [ ] ES6
-  - [ ] 函数式编程
+  - [ ] vue2 尚硅谷 基础
   - [ ] vue2全家桶
+
     - [ ] vue2应用
     - [ ] vue2源码
   - [ ] vue3全家桶
   - [ ] vue3源码
   - [ ] node
+  - [ ] webpack
 
 项目 list：
 
-- [X] 学习用：黑马小兔鲜：看完怎么用脚手架初始化项目、引入 elementplus 即可。
-- [ ] 复习：硅谷甄选 跟着视频敲一遍复习vue项目
-- [ ] 后台管理系统：vue vite pinia axios TS element-plus echarts
-- [ ] 视频播放器仿 bilibili
+- [X] 黑马小兔鲜：看完怎么用脚手架初始化项目、引入 elementplus 即可。
+- [ ] 硅谷甄选 跟着视频敲一遍复习vue项目（后台管理系统：vue vite pinia axios TS element-plus echarts）
 - [ ] 低代码平台
-
-react：
-
-- [ ] React
-- [ ] 小册子
+- [ ] 组件库
 
 代码随想录 hot100
 
 - 一天三道，1 个月过完一遍
+
+已下载的网课：
+
+u盘：
+
+- Node正式课
+
+win：
+
+- js高级
+- Vue3源码剖析
+- Vue面试题
+- vue2珠峰课堂项目
+- Vue2组件库
+- Vue3路由
+- vue3vuex
+- Vue3pinia
+- Vue3工程化
+- Vue3组件库
+- Vue3SSR
+- webpack：
+  - webpack工作流
+  - webpack性能优化
+  - webpack代码分割
+  - webpack面试题
+  - webpack核心课
+- zf解决方案
+- https
+
+mac：
+
+- es6课程
+- 函数式编程
+- vue2应用
+- vue2源码
+- vue2vuex
+- vue2珠峰课堂项目
+- vue2面试题
+- 浏览器渲染原理
+- JWT课程
+- 前端跨域
+- 网络安全
+- Vue3全家桶
+- 24TS体系课
+- Vue diff
+- 前端面试题合集
+
+ipad：
+
+- 尚硅谷vue2、vue3全家桶
+- 硅谷甄选

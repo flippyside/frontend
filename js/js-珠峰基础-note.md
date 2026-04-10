@@ -32,6 +32,8 @@ let taskExecutionContext = {
 
 ![1775302674916](image/js-基础-note/1775302674916.png)
 
+
+
 执行上下文分为：
 
 - 全局上下文
@@ -46,6 +48,8 @@ let taskExecutionContext = {
 函数上下文：每次函数执行，会产生一个执行上下文。函数上下文的 VO 不能被直接访问
 
 **调用栈**管理这些执行上下文。
+
+
 
 ### 执行上下文的生命周期
 
@@ -380,6 +384,12 @@ bindedFunc("beijing");
 
 ## 对象与原型链
 
+![image-20260407230129494](C:\Users\petunia\AppData\Roaming\Typora\typora-user-images\image-20260407230129494.png)
+
+
+
+![IMG_4966](E:\IMG_4966.jpg)
+
 - 除了基础数据类型之外，一切皆对象。函数是特殊的对象。
 - js 里没有类，但有构造函数。
 - 构造函数有 `__proto__`和 `prototype`。实例有 `__proto__`，没有 `prototype`
@@ -542,6 +552,8 @@ var Child = (function (_super) {
 })();
 ```
 
+![JPEG图像-4923-B8B2-A7-0](E:\JPEG图像-4923-B8B2-A7-0.jpeg)
+
 ## ES6
 
 ES6 新增：变量环境(VariableEnvironment)和词法环境(lexicalEnviroment)、let 和块级作用域
@@ -553,6 +565,8 @@ ES5 中，执行上下文存放有 this、VO、scopeChain
 - VE 存储 var 变量和 function
 - LE 存储 let 变量
 - outer 取代了 scopeChain，实现作用域链
+
+![IMG_4967](E:\IMG_4967.jpg)
 
 下面模拟 ES6 中的执行上下文变化：
 
@@ -717,4 +731,35 @@ DOM0 和 DOM2 区别：
 
 
 ### 事件的传播机制
+
+冒泡传播：
+
+![冒泡传播](E:\冒泡传播.png)
+
+DOM0事件绑定的方法，都是在目标阶段/冒泡阶段触发。
+
+DOM2事件绑定可以控制绑定的方法在捕获阶段触发，只需将第三个参数设置为true：`addEventListener('click', functino(){}, true)`。不过没有什么应用场景。
+
+
+
+事件委托/事件代理：根据`srcElement/target`，可以获得事件源，即当前操作对象是谁。可以针对不同事件源，做不同的处理。利用冒泡，将一个父容器A中的所有子元素的某个事件E触发后要执行的操作，委托给A的E事件。
+
+```js
+        document.body.onclick = function (ev) {
+            let target = ev.target,
+                targetClass = target.className;
+            if (targetClass == "inner") {
+                console.log("inner");
+                return;
+            }
+            if (targetClass == "outer") {
+                console.log("outer");
+                return;
+            }
+            if (targetClass == "box") {
+                console.log("box");
+                return;
+            }
+        }
+```
 

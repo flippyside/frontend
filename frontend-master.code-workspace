@@ -1,28 +1,31 @@
 {
     "folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "../BigData"
-		},
-		{
-			"name": ".leetcode",
-			"path": "C:/Users/petunia/.leetcode"
-		},
-		{
-			"path": "../23-24/al"
-		},
-		{
-			"path": "../core-main"
-		},
-		{
-			"path": "../vue-rabbit-main"
-		},
-		{
-			"path": "../YXUI-main"
-		}
-	],
+        {
+            "path": "."
+        },
+        {
+            "path": "../BigData"
+        },
+        {
+            "name": ".leetcode",
+            "path": "C:/Users/petunia/.leetcode"
+        },
+        {
+            "path": "../23-24/al"
+        },
+        {
+            "path": "../core-main"
+        },
+        {
+            "path": "../vue-rabbit-main"
+        },
+        {
+            "path": "../YXUI-main"
+        },
+        {
+            "path": "../../前端网课/44、一天搞定大数据之MapReduce"
+        }
+    ],
     "settings": {
         "liveServer.settings.multiRootWorkspaceName": "frontend-master"
     }
