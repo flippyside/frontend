@@ -19,15 +19,24 @@ Rest
 
 ## AJAX：异步的 js 和 xml
 
-作用：通过 js 向服务器发送请求来加载数据
+
+**AJAX：async JavaScript and xml 异步的js和xml**
+
+* **异步：指的是AJAX的作用，实现数据请求+客户端渲染，局部刷新**
+* **xml：早期ajax从服务器获取的数据格式是xml（可扩展标记语言）。现在通常用** `JSON`格式。
+* **核心：基于** `XMLHttpRequest`创建HTTP请求
+
+作用：通过 js 向服务器发送异步请求来加载数据
+
+Ajax可以只更新页面的一小部分，通过异步方式来发送请求，从而避免重新加载整个页面
 
 可以选择的方案：
 
 - ① XMLHTTPRequest（xhr）
 - ② Fetch
 - ③ Axios
-
 - CORS (跨域资源共享)
+
   - 跨域请求：协议、域名、端口号，三个只要有一个不同，就算跨域
 
 例如

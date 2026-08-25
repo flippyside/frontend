@@ -15,30 +15,7 @@
 </head>
 
 <body>
-    <script>
-        let body = document.body
-        body.onclick = function (ev) {
-            console.log(ev); // 打印鼠标事件对象 MouseEvent
-        }
-        body.addEventListener('click', function (ev) {
-            console.log(ev);
-        })
-        document.body.onclick = function (ev) {
-            let target = ev.target,
-                targetClass = target.className;
-            if (targetClass == "inner") {
-                console.log("inner");
-                return;
-            }
-            if (targetClass == "outer") {
-                console.log("outer");
-                return;
-            }
-            if (targetClass == "box") {
-                console.log("box");
-                return;
-            }
-        }
+    <script src="./test.js">
     </script>
 
 </body>

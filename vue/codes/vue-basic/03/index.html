@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <span>单向数据绑定：</span><input type="text" :value="msg">
+        <hr>
+        <span>双向数据绑定：</span><input type="text" v-model="msg">
+    </div>
+    <script>
+        new Vue({
+            el: "#root",
+            data: {
+                msg: '尚硅谷'
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="d1">1</div>
+      <div class="d2">2</div>
+      <div class="d3">3</div>
+    </div>
+    <div contenteditable id="editor">点击开始 <b>编辑文本</b>。</div>
+    <style>
+      #editor {
+        height: 200px;
+        padding: 1rem;
+      }
+    </style>
+
+    <script>
+      const observer = new MutationObserver((mutationRecords) => {
+        for (mutation of mutationRecords) {
+          console.log(mutation.type); // 输出属性变化的类型
+          console.log("oldValue: " + mutation.oldValue);
+          console.log(mutation.target.data); // 文本变动
+        }
+      });
+
+      // 观察除了特性之外的所有变动
+      observer.observe(editor, {
+        childList: true, // 观察直接子节点
+        subtree: true, // 及其更低的后代节点
+        characterData: true,
+        characterDataOldValue: true, // 将旧的数据传递给回调
+      });
+    </script>
+    <!-- <style>
+      .container {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: center;
+        width: 300px;
+        height: 200px;
+        background: #c18e8e;
+      }
+      .d1,
+      .d2,
+      .d3 {
+        width: 100px;
+        height: 100%;
+        background: pink;
+      }
+    </style>
+    <script src="./test.js"></script> -->
+    <!-- <script src="./默写手撕代码.js"></script> -->
+  </body>
+</html>

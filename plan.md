@@ -23,31 +23,24 @@ timeline：
 - [X] webpack
 - [X] vue: 黑马
 - [ ] 每天背八股 手写代码
-- [ ] hot100 （大厂必须，中厂 小厂只要 js 手写就行）
+- [X] hot100 （大厂必须，中厂 小厂只要 js 手写就行）
 - [X] 项目 1：包装小兔鲜。包装一些性能优化 组件封装的东西 面试能聊一聊就够了
 - [X] 项目 2：组件库
 - [ ] 珠峰网课
 
   - [X] js基础
   - [X] 函数式编程
-  - [ ] js高级
-  - [ ] ES6
-  - [ ] vue2 尚硅谷 基础
-  - [ ] vue2全家桶
-
-    - [ ] vue2应用
-    - [ ] vue2源码
-  - [ ] vue3全家桶
-  - [ ] vue3源码
+  - [X] js高级
+  - [X] ES6
+  - [X] vue2+3 尚硅谷 基础
   - [ ] node
-  - [ ] webpack
+- [ ] webpack
 
 项目 list：
 
 - [X] 黑马小兔鲜：看完怎么用脚手架初始化项目、引入 elementplus 即可。
-- [ ] 硅谷甄选 跟着视频敲一遍复习vue项目（后台管理系统：vue vite pinia axios TS element-plus echarts）
-- [ ] 低代码平台
-- [ ] 组件库
+- [X] 硅谷甄选 跟着视频敲一遍复习vue项目（后台管理系统：vue vite pinia axios TS element-plus）
+- [X] 组件库
 
 代码随想录 hot100
 

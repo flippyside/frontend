@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <!-- <h1>姓名：{{name}}</h1>
+        <h1>地址：{{address}}</h1> -->
+        <input v-model="name"></input>
+        <input v-model="address"></input>
+        <p>{{fullname}}</p>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: "#root",
+            data() {
+                return {
+                    name: 'abc',
+                    address: 'zhejiang',
+                    fullname: 'abc-zhejiang'
+                }
+            },
+            methods: {
+            },
+            watch: {
+                name(newValue) {
+                    setInterval(() => {
+                        this.fullname = newValue + '-' + this.address;
+                    }, 1000)
+                },
+                address(newValue) {
+                    this.fullname = this.name + '-' + newValue;
+                }
+            },
+            // watch: {
+            //     isHot: {
+            //         // isHot改变时调用
+            //         handler(newValue, oldValue) {
+            //             console.log(newValue, oldValue);
+            //         },
+            //         // 初始化时立即调用一次
+            //         immediate: true,
+            //     }
+            // },
+
+        })
+
+        vm.$watch('isHot', function (newValue, oldValue) {
+            console.log(newValue, oldValue);
+        })
+        // vm.$watch('isHot',
+        //     {
+        //         handler(newValue, oldValue) {
+        //             console.log(newValue, oldValue);
+        //         },
+        //         immediate: true,
+        //         deep: true
+        //     });
+
+        // console.log(vm);
+
+
+    </script>
+</body>
+
+</html>

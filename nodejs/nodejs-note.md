@@ -460,9 +460,9 @@ fn5();
 - 1. 无法选择要引入模块的哪些内容
 - 2. 在复杂的模块场景下非常容易出错
 
-在 node 中，默认支持的模块化规范叫做 CommonJS。在 CommonJS 中，一个 js 文件就是一个模块
+### CommonJS 规范
 
-CommonJS 规范
+在 node 中，默认支持的模块化规范叫做 CommonJS。在 CommonJS 中，一个 js 文件就是一个模块
 
 - 引入模块
   - 使用 require("模块的路径")函数来引入模块
@@ -515,7 +515,7 @@ const path = require("node:path");
 
 也可以引入一个文件夹模块。该文件夹中会有 index.js 文件，index.js 文件中会有该文件夹其他文件的引入
 
-### 原理
+#### 原理
 
 所有的 CommonJS 的模块都会被包装到一个函数中
 

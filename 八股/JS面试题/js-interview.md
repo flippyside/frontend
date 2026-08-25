@@ -1,4 +1,11 @@
-## ![Snipaste_2026-04-06_10-25-01](E:\Snipaste_2026-04-06_10-25-01.png)谈谈对 js 事件循环的理解？
+- [ ] 原型链：__proto__、prototype、new 的过程
+- [x] 执行上下文、作用域
+- [x] this 绑定：四种规则、箭头函数
+- [x] 闭包：应用场景（防抖节流、私有变量）及内存泄漏
+- [ ] Event Loop：宏任务/微任务、async/await 的执行顺序
+- [ ] Promise：手写 Promise 核心、all/race/allSettled 等
+
+## 谈谈对 js 事件循环的理解？
 
 任务分为：
 
@@ -17,9 +24,11 @@ JS 是单线程的，运行基于事件循环机制(event loop)：对于异步�
 
 任务队列分为：
 
-- 宏任务队列 （大部分代码都去宏任务队列中去排队，例如 setTimeout、script、I/O）
+- **宏任务**队列 （大部分代码都去宏任务队列中去排队，例如 整体脚本代码script、setTimeout、I/O、UI 渲染）
 - 微任务队列 （Promise 的回调函数（then、catch、finally））
   - queueMicrotask() : 向微任务队列中添加一个任务
+
+在当前宏任务执行过程中产生的微任务会在该宏任务结束后、下一个宏任务开始前立即执行。
 
 宏任务通常不太紧急，微任务通常比较紧急且相关性较强
 
@@ -46,40 +55,66 @@ ES6 新增两种：symbol、bigint：
 
 ## this
 
-this：谁来调用就是谁，即，当前执行这个逻辑的主题是谁，亦即，`.`前是谁
+### 普通函数的this
+
+普通函数的this 是在函数调用时的创建的**执行上下文**中确定的。四种规则：按优先级高低
+
+- **new 绑定？**--> 指向新对象。
+- **call/apply/bind 显式绑定？**--> 指向指定对象。
+- **隐式绑定（在对象属性上调用）？**--> 指向该对象。
+- **默认绑定？**--> 指向 `window` 或 `undefined`。
+
+this：谁来调用就是谁，亦即`.`前是谁，例如obj.func()，this就是func
 
 如果没有 `.`调用：
 
 - 非严格模式：默认window调用
 - 严格模式：undefined
 
-具体来说，js 中 this 的指向取决于调用时的上下文。
+与变量不同， 变量是通过**作用域链**（静态、定义时决定）去找的；而普通函数的 `this` 是通过**调用方式**（动态、运行时决定）去绑定的，所以多次调用函数，this值可能不同。
 
 - 全局作用域中 this 指向全局对象（浏览器为 window，Node.js 为 global）。
-- 函数中 this 由调用方式决定：通过对象调用时指向该对象，直接调用时指向全局对象。
-- 构造函数中 this 指向新创建的实例，
+- 可以使用call bind apply手动指定this
+- 构造函数中 this 指向新创建的实例
 - 事件绑定时，this指向绑定的元素
 - 事件处理器中 this 指向触发事件的元素。
 
-this 是在创建函数的执行上下文时确定的。
+### 箭头函数的this
 
-判断 this 指向：
+箭头函数没有自己的this，于是this行为如同普通变量，顺着作用域链向上查找到**父级作用域的词法环境**的this。
 
-- 如果 `.`左边是一个引用(reference),那么，函数的 this 指向的就是这个引用所属的对象。例如  `foo.func();`
-- 否则 this 指向的就是全局对象(window|global)。例如 `func();`
+由于词法环境是JS编译时就确定的，所以this在箭头函数定义时就确定了。无论如何调用，其 this 不会改变。
+
+```js
+const obj = {
+    name: 'haha',
+    regular: function() {
+        console.log(this.name);
+    },
+    arrow: () => {
+        console.log(this.name);
+    }
+};
+
+obj.regular(); // 输出 'haha'：调用者是 obj，this 动态绑定到 obj
+obj.arrow();   // 输出 undefined (或 window.name)：它没有 this，向上找到全局作用域
+```
+
+注意， `obj` 的大括号 `{}` **不会产生词法环境**（只有函数和块级作用域会）。
 
 ## 箭头函数与普通函数的区别
 
 箭头函数：
 
 - 是匿名函数，不能作为构造函数，使用 new 会报错。
-- 没有 arguments
+- 没有 arguments，和this一样，沿着作用域链找外层的
 - 没有 prototype
+- 不能作为方法
 - this 指向不同：
-  - 箭头函数没有自己的 this，而是继承外层作用域，即指向箭头函数定义时所在的上下文的 this；无论如何调用，其 this 不会改变。
+  - 箭头函数没有自己的 this，而是顺着作用域链向上查找到**父级作用域的词法环境**的this。
   - 普通函数的 this 动态指向调用者（默认指向 window，作为对象方法则指向该对象）
-- call()、applay()、bind()方法不能改变箭头函数中的 this 指向，普通函数可以。
-- 箭头函数不能用作 Generator 函数，不能使用 yeild 关键字
+- 当使用 `call()`、`bind()` 或 `apply()` 调用箭头函数时，`thisArg` 参数会被忽略
+- 箭头函数不能用作 Generator 函数，其内部不能使用 yeild 关键字
 
 ## 实现防抖节流
 
@@ -87,6 +122,8 @@ this 是在创建函数的执行上下文时确定的。
 
 - 防抖：n 秒后再执行此事件。若在 n 秒内被重复触发，则重新计时
 - 节流：n 秒内只运行一次，若在 n 秒内被重复触发，只有一次生效
+
+节流: 当水龙头的水一直往下流，这十分的浪费水，所以我们可以把龙头关小一点，让水一滴一滴往下流，每隔一段时间掉下来一滴水。
 
 区别：
 
@@ -145,7 +182,7 @@ const handleInput = debounce(() => {
 
 ## 你对 Promise 的理解
 
-Promise 是异步编程的一种解决方案，避免了回调地狱。它不是新的语法功能，而是一种新的写法，允许将回调函数的横向加载，改成纵向加载。
+多个异步操作依赖时，嵌套层层加深，导致代码可读性差。Promise 是异步编程的一种解决方案，避免了回调地狱。它不是新的语法功能，而是一种新的写法，允许将回调函数的横向展开，改成纵向展开。
 
 Promise 的三种状态：pending、fulfiling、rejected
 
@@ -154,18 +191,14 @@ Promise 的三种状态：pending、fulfiling、rejected
 - pending->fulfiling：resolved 已完成
 - pending->rejected：rejected 已拒绝
 
-Promise 的构造函数接受一个回调函数，回调函数包含两个参数：resolve、reject
+Promise 的构造函数接受一个executor函数，该函数会立即执行，包含两个参数：resolve、reject
 
 - resolve 在异步操作成功时调用，将结果返回，作为参数传递出去
 - reject 在异步操作失败时调用，将错误信息返回，作为参数传递出去
 
 Promise 的特点：
 
-- 无法取消 promise，一旦新建便立即执行，无法中途取消
 - 如果不设置处理错误的回调函数，promise 内部抛出的错误将不会反映到外部
-- 处于 pending 状态时，无法得知目前进展到哪一个阶段
-
-所谓回调函数，就是把任务的第二段单独写在一个函数里面，等到重新执行这个任务的时候，就直接调用这个函数。它的英语名字 callback，直译过来就是"重新调用"。
 
 ## 协程
 
@@ -213,15 +246,15 @@ function asnycJob() {
 
 ```js
 //普通函数
-function fn(a,b,c,d,e) {
-  console.log(a,b,c,d,e)
+function fn(a, b, c, d, e) {
+  console.log(a, b, c, d, e);
 }
 //生成的柯里化函数
 let _fn = curry(fn);
 
-_fn(1,2,3,4,5);     // print: 1,2,3,4,5
-_fn(1)(2)(3,4,5);   // print: 1,2,3,4,5
-_fn(1,2)(3,4)(5);   // print: 1,2,3,4,5
+_fn(1, 2, 3, 4, 5); // print: 1,2,3,4,5
+_fn(1)(2)(3, 4, 5); // print: 1,2,3,4,5
+_fn(1, 2)(3, 4)(5); // print: 1,2,3,4,5
 _fn(1)(2)(3)(4)(5); // print: 1,2,3,4,5
 ```
 
@@ -230,8 +263,8 @@ _fn(1)(2)(3)(4)(5); // print: 1,2,3,4,5
 - 正则检验，比如校验电话号码、校验邮箱、校验身份证号、校验密码等。
 
 ```js
-function checkByRegExp(regExp,string) {
-    return regExp.test(string);  
+function checkByRegExp(regExp, string) {
+  return regExp.test(string);
 }
 
 //进行柯里化
@@ -241,13 +274,13 @@ let checkCellPhone = _check(/^1\d{10}$/);
 //生成工具函数，验证邮箱
 let checkEmail = _check(/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/);
 
-checkCellPhone('18642838455'); // 校验电话号码
-checkCellPhone('13109840560'); // 校验电话号码
-checkCellPhone('13204061212'); // 校验电话号码
+checkCellPhone("18642838455"); // 校验电话号码
+checkCellPhone("13109840560"); // 校验电话号码
+checkCellPhone("13204061212"); // 校验电话号码
 
-checkEmail('test@163.com'); // 校验邮箱
-checkEmail('test@qq.com'); // 校验邮箱
-checkEmail('test@gmail.com'); // 校验邮箱
+checkEmail("test@163.com"); // 校验邮箱
+checkEmail("test@qq.com"); // 校验邮箱
+checkEmail("test@gmail.com"); // 校验邮箱
 ```
 
 ### 实现 curry 函数
@@ -308,8 +341,8 @@ function _curry(fn, len, ...args) {
  * @param  holder       占位符，默认当前柯里化函数
  * @return {Function}   柯里化后的函数
  */
-function curry(fn,length = fn.length,holder = curry){
-    return _curry.call(this,fn,length,holder,[],[])
+function curry(fn, length = fn.length, holder = curry) {
+  return _curry.call(this, fn, length, holder, [], []);
 }
 /**
  * 中转函数
@@ -320,41 +353,44 @@ function curry(fn,length = fn.length,holder = curry){
  * @param holders       已接收的占位符位置列表
  * @return {Function}   继续柯里化的函数 或 最终结果
  */
-function _curry(fn,length,holder,args,holders){
-    return function(..._args){
-        //将参数复制一份，避免多次操作同一函数导致参数混乱
-        let params = args.slice();
-        //将占位符位置列表复制一份，新增加的占位符增加至此
-        let _holders = holders.slice();
-        //循环入参，追加参数 或 替换占位符
-        _args.forEach((arg,i)=>{
-            //真实参数 之前存在占位符 将占位符替换为真实参数
-            if (arg !== holder && holders.length) {
-                let index = holders.shift();
-                _holders.splice(_holders.indexOf(index),1);
-                params[index] = arg;
-            }
-            //真实参数 之前不存在占位符 将参数追加到参数列表中
-            else if(arg !== holder && !holders.length){
-                params.push(arg);
-            }
-            //传入的是占位符,之前不存在占位符 记录占位符的位置
-            else if(arg === holder && !holders.length){
-                params.push(arg);
-                _holders.push(params.length - 1);
-            }
-            //传入的是占位符,之前存在占位符 删除原占位符位置
-            else if(arg === holder && holders.length){
-                holders.shift();
-            }
-        });
-        // params 中前 length 条记录中不包含占位符，执行函数
-        if(params.length >= length && params.slice(0,length).every(i=>i!==holder)){
-            return fn.apply(this,params);
-        }else{
-            return _curry.call(this,fn,length,holder,params,_holders)
-        }
+function _curry(fn, length, holder, args, holders) {
+  return function (..._args) {
+    //将参数复制一份，避免多次操作同一函数导致参数混乱
+    let params = args.slice();
+    //将占位符位置列表复制一份，新增加的占位符增加至此
+    let _holders = holders.slice();
+    //循环入参，追加参数 或 替换占位符
+    _args.forEach((arg, i) => {
+      //真实参数 之前存在占位符 将占位符替换为真实参数
+      if (arg !== holder && holders.length) {
+        let index = holders.shift();
+        _holders.splice(_holders.indexOf(index), 1);
+        params[index] = arg;
+      }
+      //真实参数 之前不存在占位符 将参数追加到参数列表中
+      else if (arg !== holder && !holders.length) {
+        params.push(arg);
+      }
+      //传入的是占位符,之前不存在占位符 记录占位符的位置
+      else if (arg === holder && !holders.length) {
+        params.push(arg);
+        _holders.push(params.length - 1);
+      }
+      //传入的是占位符,之前存在占位符 删除原占位符位置
+      else if (arg === holder && holders.length) {
+        holders.shift();
+      }
+    });
+    // params 中前 length 条记录中不包含占位符，执行函数
+    if (
+      params.length >= length &&
+      params.slice(0, length).every((i) => i !== holder)
+    ) {
+      return fn.apply(this, params);
+    } else {
+      return _curry.call(this, fn, length, holder, params, _holders);
     }
+  };
 }
 ```
 
@@ -432,45 +468,65 @@ solution：
 
 ## 数组的原生方法
 
-1. **修改原数组的方法（Mutator Methods）**
+1. **修改原数组**
 
 这些方法会改变原有的数组对象。
 
-* push() ：在数组末尾添加元素，返回新长度。
-* pop() ：删除数组最后一个元素，返回该元素。
-* unshift() ：在数组开头添加元素，返回新长度。
-* shift()：删除数组第一个元素，返回该元素。
-* splice() ：从指定位置添加/删除元素，用于增删改操作。
-* sort() ：对数组元素进行排序。
-* reverse() ：颠倒数组中元素的顺序。
-* fill() ：用固定值填充数组。
+- push() ：在数组末尾添加元素，返回新长度。
+- pop() ：删除数组最后一个元素，返回该元素。
+- unshift() ：在数组开头添加元素，返回新长度。
+- shift()：删除数组第一个元素，返回该元素。
+- splice(start, deleteCount, items…) ：从指定位置删除/替换/插入元素，用于增删改操作。
+- sort() ：对数组元素进行排序。
+- reverse() ：颠倒数组中元素的顺序。
+- fill() ：用固定值填充数组。
+- `copyWithin(target, start, end)`：在数组内部复制一段覆盖另一段。
 
-2. **不改变原数组的方法（Accessor Methods）**
+`[1,2,3,4].copyWithin(1, 2); // [1,3,4,4]`
+
+2. **不改变原数组**
 
 这些方法会返回一个新数组或数值，原数组保持不变。
 
-* concat()：合并两个或多个数组。
-* slice()：返回数组的浅拷贝切片。
-* join()：将数组元素连接为字符串。
-* indexOf()/ lastIndexOf()：查找元素索引。
-* includes()：判断数组是否包含特定值。
-* toString()：返回数组的字符串表示。
+- concat()：合并两个或多个数组。
+- slice(start, end)：截取start, end片段（不包含end）返回数组的浅拷贝切片。
+- join(separator)：用分隔符合并成字符串
+- indexOf()/ lastIndexOf()：查找元素索引。
+- includes()：判断数组是否包含特定值。
+- toString()：返回数组的字符串表示(逗号分隔)。
+- flat/flatMap：拍平数组
 
-3. **数组遍历与迭代方法（Iteration Methods）**
+```js
+console.log([1, 2, 3, 4, 5].slice(1, -1)); // [ 2, 3, 4 ] 表示截取索引1到-1，不包含-1 (-1表示最后一个)
+```
 
-* forEach()：对每个元素执行一次操作
-* map()：创建一个新数组，其结果是该数组中的每个元素调用一次函数。
-* filter()：创建一个新数组，包含通过测试的所有元素。
-* reduce()：归并数组为单个值。
-* find()：查找满足条件的第一个元素或索引。
-* some()：测试是否至少有一个元素通过测试。
-* every()：测试是否所有元素通过测试。
+3. **数组遍历与迭代方法（除了forEach外，全部不改变原数组）**
+
+- forEach(cb)：对每个元素执行一次cb操作，修改原数组，无返回值。
+- map(cb)：返回一个新数组，其结果是该数组中的每个元素调用一次cb函数。
+- filter(cb)：返回一个新数组，包含通过测试的所有元素。
+- reduce(cb)：归并数组为单个值，从左到右。
+- find(cb)：查找满足条件的第一个元素或索引。
+- some(cb)：至少有一个元素通过测试→ `true`。
+- every(cb)：所有元素通过测试→ `true`。
 
 4. **静态方法**
 
-* Array.isArray()：判断一个值是否为数组。
-* Array.from()：将类数组对象转为真正数组。
-* Array.of()：将一组值转换为数组。
+- Array.isArray()：判断一个值是否为数组。
+- Array.from(iterable)：将类数组/可迭代对象转为真正数组。
+- Array.of(...values)：将一组值转换为数组。
+
+注意点：
+
+- `map` vs `forEach` ：`map` 有返回值（新数组），`forEach` 无返回值。
+- `splice` vs `slice` ：`splice` 修改原数组，`slice` 不修改。
+- `sort` 默认按字符串排序 ，数字排序需提供比较函数：
+
+```js
+[1, 30, 4].sort((a, b) => a - b); // [1,4,30]
+```
+
+- `reverse` 会改变原数组。
 
 ## substring 和 substr 的区别
 
@@ -726,28 +782,109 @@ child1.sayAge(); // 18
 
 ## 理解闭包
 
-闭包 closure：有权访问另一个函数作用域中变量的函数。创建闭包的最常见方式是在一个函数内创建另一个函数，这个函数可以访问到当前函数的局部变量
+是什么：一个函数引用了外层函数作用域的变量，那么这个函数和它引用的外部变量就构成了闭包。在DevTools 中可以看到 `[[Scopes]]` 下的 `Closure` 对象。
 
-优点：
+准确来说，闭包是函数和它的词法环境组合。当外层函数执行完毕，其执行上下文会从栈中弹出并销毁。但如果其内部函数被外部引用（比如说return出去并被接收），由于内部函数在创建时通过隐藏属性 `[[Environment]]`（v8中表现为[[scopes]]） 持有了对外层词法环境的引用，导致这部分环境（及其中被引用的变量）没有被垃圾回收，从而实现了变量在堆内存中的持久化存储。
 
-- 创建全局私有变量，避免变量全局污染
-- 可以实现封装、缓存
+为什么要用闭包：
 
-缺点：
+- 闭包中引用的外部变量，表现得就像闭包函数的**私有属性**。外部不能直接修改变量，但可以通过闭包函数去修改。
+- 闭包可以**延长变量的生命周期**。原本外层函数作用域的变量会在函数执行完后销毁，但由于内部函数引用了它，使得变量不会被销毁。虽然这也可能造成内存泄漏（解决方法：手动将闭包函数置为 `null`。）。
+  - 准确来说，外层作用域的词法环境会随着执行上下文的销毁而销毁，但由于内部函数引用了词法环境中的一些变量，导致这部分变量不会被回收，继续存储在堆内存的closures对象中。
+- 在**防抖节流、函数柯里化**中都有闭包的运用。
 
-- 创建的变量不能被回收，消耗内存。若使用闭包后变量没有及时销毁，可能导致内存溢出
-  - 解决：在不需要使用的时候把变量设为 null
+创建闭包的最常见方式是在一个函数内创建另一个函数并return出去，且函数访问了当前函数的局部变量
 
-使用场景：
 
-- 创建私有变量
-- 延长变量的生命周期
-- 封装类和模块
-- 科里化函数
+
+## 理解执行上下文、词法环境、变量环境
+
+js是解释型语言，分为解释+执行两个阶段。
+
+js代码在执行上下文中运行。执行上下文是运行js代码的环境。分为全局执行上下文、函数执行上下文、Eval 函数执行上下文。
+
+js引擎执行js代码时，执行上下文会经历三个阶段：
+
+创建阶段：
+
+- **确定this的值**（全局执行上下文，this的值是全局对象window；函数执行上下文，如果函数被引用对象调用，则this是这个对象，否则是全局对象或undefined）
+- 创建**词法环境**（收集let、const、function声明，不赋值）、**变量环境**（收集var声明，赋值为undefined，也称作变量提升）
+
+执行阶段：
+
+- 变量赋值、代码运行
+
+销毁阶段：
+
+- 执行上下文出栈并被回收。
+
+js引擎第一次遇到我们写的脚本时，它会创建一个**全局的执行上下文**（包括词法环境、变量环境、this）并且压入当前**调用栈**。每当引擎遇到一个函数调用，它会为该函数创建一个**新的函数执行上下文**（包括词法环境、变量环境、this）并压入栈的顶部。引擎会执行位于栈顶的执行上下文，执行完毕后从栈中弹出，然后继续执行栈顶的上下文。
+
+注意，函数的执行上下文**是在函数**被调用的时候创建的，而不是在函数声明的时候；词法环境则是在函数声明时创建的。（为什么？因为执行上下文需要知道函数的参数，声明时还不知道）
+
+### 词法环境、变量环境
+
+词法环境由**环境记录器**和**外部环境的引用（outer reference）**组成。环境记录器存储变量、函数，而外部环境的引用指向父级词法环境，后续变量查找时有用（通过outer指针逐级向上查找）。
+
+环境记录器由两种类型，
+
+- 对象环境记录器（在全局执行上下文中）：存储出现在全局执行上下文中的变量、函数
+- 声明式环境记录器（在函数执行上下文中）：存储函数的参数、变量、函数
+
+```js
+GlobalExectionContext = {        // 全局执行上下文
+    LexicalEnvironment: {        // 词法环境
+        EnvironmentRecord: {     // 环境记录器：存储变量和函数声明的实际位置
+            Type: "Object",      
+            // 在这里绑定标识符  
+        }
+        outer: <null>           // 对外部环境的引用：可以访问其父级词法环境
+    }
+}
+
+FunctionExectionContext = {     // 函数执行上下文
+    LexicalEnvironment: {
+        EnvironmentRecord: {
+            Type: "Declarative",
+            // 在这里绑定标识符
+        }
+        outer: <Global or outer function environment reference>
+    }
+}
+```
+
+变量环境和词法环境几乎相同，只不过它用来存储var变量。
+
+### 词法环境是一个对象，存储在堆中
+
+如果所有变量都存在词法环境里，也就是堆中，JS 的性能岂不是比 C 这种直接操作栈内存的语言慢得多？V8通过逃逸分析来解决这个问题。
+
+V8引擎通过分析对象的作用域，决定其是否被外部访问，以进行优化：
+
+- **不逃逸：** 对象仅在当前函数内部使用。V8可能将对象属性拆解，直接分配在栈上或寄存器中（标量替换），无需垃圾回收，速度极快。
+- **逃逸：** 对象被返回、赋值给外部变量或方法内的方法引用（闭包）。此时对象必须在堆（Heap）上分配。
+
+
+
+## let/const/var
+
+变量提升：表现为可以在声明之前访问 `var` 定义的变量（虽然是 `undefined`）
+
+暂时性死区：表现为在声明之前访问 `let` 和 `const` 的变量会得到一个引用错误。
+
+原因：JS扫描代码，创建词法环境和变量环境的时候，let/const、var的声明虽然都被收集，但只有var会被赋值为undefined，而let/const都是未赋值状态，如果访问会报错。
+
+
 
 ## 对作用域、作用域链的理解
 
-作用域是一个变量或函数的可访问范围，作用域控制着变量或函数的可见性和生命周期。
+**作用域（词法作用域）**：作用域是变量和函数的可访问性规则集合，可以比作一个独立的区域，确定了变量或函数的可访问范围。作用域最大的用处就是隔离变量。内层作用域可以访问外层作用域，而反之不行。分为全局、函数、块级作用域。
+
+作用域在js执行代码前的扫描阶段（词法分析阶段）就已经确定了，之后不会再变。**词法环境**是 ECMA 规范中用于实现作用域的一种机制。而执行上下文是动态的，每调用一次函数，就会产生新的执行上下文。
+
+**作用域链**：变量在指定的作用域中没有找到，会通过outer，依次向外层作用域进行查找，直到全局作用域。这个查找的过程被称为作用域链。词法环境中的**外部环境引用(outer reference)**便是作用域链的具体实现。
+
+---
 
 全局作用域：可以全局访问
 
@@ -756,7 +893,7 @@ child1.sayAge(); // 18
 - 为定义直接复制的变量自动申明拥有全局作用域
 - 过多的全局作用域变量会导致变量全局污染，命名冲突
 
-函数作用域：只能在函数中访问使用哦
+函数作用域：只能在函数中访问使用
 
 - 在函数中定义的变量，都只能在内部使用，外部无法访问
 - 内层作用域可以访问外层，外层不能访问内存作用域
@@ -767,14 +904,14 @@ ES6 中的块级作用域：只在代码块中访问使用
 - let、const 申明的变量不会变量提升，const 也不能重复申明
 - 块级作用域主要用来解决由变量提升导致的变量覆盖问题
 
-作用域链：变量在指定的作用域中没有找到，会依次向一层作用域进行查找，直到全局作用域。这个查找的过程被称为作用域链。
+注意， 定义对象的大括号 `{}` **不会产生词法环境**。
 
 ## bind()
 
 bind用于将函数内的this指向目标对象：
 
 ```js
-f.bind(obj)  // 等价于obj.f()
+f.bind(obj); // 等价于obj.f()
 ```
 
 bind() 的第一个参数赋给新函数的 this，其余参数将作为新函数的参数，供调用时使用。
@@ -783,60 +920,63 @@ bind使用场景：解决this指向不符合预期的问题。例如，write方�
 
 ```js
 // 将document的write方法赋给altwrite
-let altwrite = document.write
+let altwrite = document.write;
 
-altwrite('hello') // Uncaught TypeError: Illegal invocation
+altwrite("hello"); // Uncaught TypeError: Illegal invocation
 ```
 
 `bind()` 将altwrite 中的this指向 document对象，然后传入参数执行：
 
 ```js
 // 将document的write方法赋值
-let altwrite = document.write
+let altwrite = document.write;
 
-altwrite.bind(document)("hello") // 等价于：altwrite.call(document, "hello")
+altwrite.bind(document)("hello"); // 等价于：altwrite.call(document, "hello")
 ```
 
 实现bind：
 
 ```js
 // 不可传参的bind
-Function.prototype.my_bind = function(context){
-    var self = this;
-    return function(){
-        self.apply(context, arguments);
-    }
-}
+Function.prototype.my_bind = function (context) {
+  var self = this;
+  return function () {
+    self.apply(context, arguments);
+  };
+};
 ```
 
 ```js
 // 使用例
-function a(){
-    console.log(this.name);
+function a() {
+  console.log(this.name);
 }
-var b = { name: 'apple' };
+var b = { name: "apple" };
 a.bind(b); // apple
 a.my_bind(b); // apple
 ```
 
 ```js
 // 可传参的bind
-Function.prototype.my_bind = function(){
-    var self = this; // 原函数
-    var context = Array.prototype.shift.call(argument); // 要绑定的this上下文
-    var args = Array.prototype.concat.call(argument); // 剩余参数
-    return function(){
-        self.apply(context, Array.prototype.concat.call(args, Array.prototype.slice.call(arguments)));
-    }
-}
+Function.prototype.my_bind = function () {
+  var self = this; // 原函数
+  var context = Array.prototype.shift.call(argument); // 要绑定的this上下文
+  var args = Array.prototype.concat.call(argument); // 剩余参数
+  return function () {
+    self.apply(
+      context,
+      Array.prototype.concat.call(args, Array.prototype.slice.call(arguments)),
+    );
+  };
+};
 ```
 
 ```js
 // 使用例
-function func(a, b ,c){
-    console.log(this.name + a + b + c);
+function func(a, b, c) {
+  console.log(this.name + a + b + c);
 }
-var b = { name: 'apple' };
+var b = { name: "apple" };
 a.my_bind(b, 1, 2)(3); // apple123
 ```
 
@@ -861,34 +1001,34 @@ func.call(thisArg, arg1, arg2, ...)
 
 ```js
 Function.prototype.my_call = function (context = window) {
-  let _context = context // 第一个参数不传默认为全局对象window
-  _context.fn = this // 将foo作为thisArg的私有方法, this改变
-  const args = [...arguments].slice(1) // 截取下标从1开始的参数 {'param1', 'param2'}
-  const result = _context.fn(...args) // 调用方法，并传递参数
-  delete _context.fn
-  return result
-}
+  let _context = context; // 第一个参数不传默认为全局对象window
+  _context.fn = this; // 将foo作为thisArg的私有方法, this改变
+  const args = [...arguments].slice(1); // 截取下标从1开始的参数 {'param1', 'param2'}
+  const result = _context.fn(...args); // 调用方法，并传递参数
+  delete _context.fn;
+  return result;
+};
 ```
 
 使用例：
 
 ```js
 let target = {
-  value: 'apple'
-}
+  value: "apple",
+};
 function foo(param1, param2) {
-  console.log(param1)
-  console.log(param2)
-  console.log(this.value)
+  console.log(param1);
+  console.log(param2);
+  console.log(this.value);
 }
-foo.my_call(target, '1', '2') // 1 2 apple
+foo.my_call(target, "1", "2"); // 1 2 apple
 ```
 
 ## apply()
 
 apply与call基本一致，除了apply的参数为数组形式。
 
-```js
+````js
 // thisArg：func运行时this指向的对象
 func.apply(thisArg, [argsArray])
 ``
@@ -903,7 +1043,7 @@ Function.prototype.my_apply = function(context = window, arr){
   delete _context.fn
   return result
 }
-```
+````
 
 ## call() 、bind（）、 apply() 的联系与区别
 
@@ -931,19 +1071,277 @@ fn.apply(targetThis, [param1, param2, param3 ...])
 
 ## call和apply的区别是什么？哪个性能更高
 
-call性能更高。
+call性能更高。因为`apply` 需要处理数组。
 
 两者都可以改变this后执行函数，区别是：
+
 - call参数是依次传入
 - apply参数以数组形式传入
 
 ```js
 Function.prototype.call = function (obj, ...args) {
-    const context = obj
-    const fn = Symbol()
-    context[fn] = this
-    const result = context[fn](...args)
-    delete context[fn]
-    return result
-}
+  const context = obj;
+  const fn = Symbol();
+  context[fn] = this;
+  const result = context[fn](...args);
+  delete context[fn];
+  return result;
+};
 ```
+
+## Object.create与 `new` 的区别
+
+| 对比项   | `Object.create(proto)` | `new Constructor()`              |
+| -------- | ---------------------- | -------------------------------- |
+| 原型设置 | 直接指定原型对象       | 原型来自 `Constructor.prototype` |
+| 构造函数 | 不调用构造函数         | 调用 `Constructor` 函数          |
+| 适用场景 | 继承                   | 创建实例                         |
+
+## Object.create()、new Object()和{}创建对象的区别
+
+创建对象的三种方法：
+
+1. 字面量创建 ：var obj1 = {};
+2. new操作符创建：new Object();
+3. Object.create()创建：Object.create(null);
+
+---
+
+字面量创建对象：简单快速地编写一个逗号分隔的键值对对象。无法继承其他对象的属性和方法。
+
+`new`创建对象：
+
+- 创建一个空对象{}；
+- 为新对象添加属性 `__proto__`，指向构造函数的原型对象 ；
+- 对空对象调用构造函数
+- 如果构造函数中没有返回新对象，那么直接返回这个新对象；否则，返回构造函数返回的对象
+
+`Object.create(proto, propertiesObject)`创建对象 ：
+
+- 创建一个新对象，设置其 `[[Prototype]]` 为指定对象 `proto`（或 `null`），并返回。
+- 可选：定义自身属性(propertiesObject)
+
+---
+
+1. 创建空对象的区别
+
+如果要创建一个**纯净**的空对象，推荐使用Object.create(null)，它创建的对象不会有原型，也不会有Object 原型对象的任何属性（例如toString，hasOwnProperty等）
+
+```
+想避免执行构造函数，就用 Object.create。
+```
+
+2. 创建含有属性的对象的区别
+
+Object.create()创建的对象只是原型指向原型对象，并不会获得私有属性，但可以沿着原型链访问原型对象的属性方法；
+
+而new出来的对象有自有属性（构造函数创建的），也能通过原型链访问原型对象的属性和方法。
+
+---
+
+
+
+## 获取对象的键
+
+
+
+```
+for in 自身以及原型链上的可枚举属性，通常需要配合使用 obj.hasOwnProperty(key) 来过滤掉原型链上的属性
+Object.keys(obj) 自身所有可枚举属性
+Object.getOwnPropertyNames() 自身所有属性（包括不可枚举属性，但不包括 Symbol 属性）
+Object.getOwnPropertySymbols()  自身所有 Symbol 属性
+Reflect.ownKeys(obj) 所有自身属性，包括可枚举、不可枚举以及 Symbol 属性
+```
+
+# ES6
+
+
+
+## 谈谈你对 ES6 的理解
+
+ES 是 js 的规范，js 是一门遵循了 ES 语言规范而设计的语言，ES6 是目前许多主流框架的基础。
+
+新增了一些语法和 API：
+
+- 新增变量 let 和 const
+- 新增箭头函数
+- 解构赋值，用于快速复制数组和对象
+- 模版字符串
+- 操作对象的新 API：Proxy、Reflect
+- 模块化
+- 面向对象
+- 异步编程的一种解决方案：Promise
+
+## ES6的块级作用域(let、const\)
+
+作用域是一个变量或函数的可访问范围，作用域控制着变量或函数的可见性和生命周期。
+
+局部作用域分为
+
+- 函数作用域：函数内部的代码
+- 块级作用域：`{}`包围的代码
+
+全局作用域：`<script>`标签内部、js 文件
+
+作用域链：
+
+- 会优先在当前函数作用域中查找变量
+- 查找不到，则依次逐级查找父级作用域直到全局作用域
+
+在 ES6 之前，作用域只有 2 种：全局作用域和函数作用域。
+
+JavaScript 的变量提升：
+
+- 将 var 变量提升到当前作用域的最前面
+- 只提升变量声明，不提升赋值
+- 然后依次执行代码
+
+ES6 引入了 `let` 和 `const` 关键字，JavaScript 也有了块级作用域。简单来讲，如果⼀种语⾔⽀持块级作⽤域，那么其代码块内部定义的变量在代码块外部是访问不到的，并且等该代码块中的代码执⾏完成之后，代码块中定义的变量会被销毁。
+
+ES6的块级作用域解决了变量提升的问题：
+
+* `let` 或者 `const` 声明的变量只在 `let` 或 `const` 命令所在的代码块内有效。
+* 不存在变量提升：不同于 `var`，在 `let` 或 `const` 之前访问不到它们定义的变量，会报错（Uncaught ReferenceError: bar is not defined）。
+* 块级作用域也可以在函数中创建（由{}包裹的代码都是块级作用域）
+
+## 比较promise方法all、allsettled、race、any
+
+`promise.all(promises: Iterable<Promise>)`：传入多个 Promise 参数，返回多个 Promise 的执行结果组成的数组
+
+- 其中若有一个 Promise 报错，就返回错误
+
+`Promise.allSettled(promises: Iterable<Promise>)`：同时返回多个 Promise 的执行结果(无论成功或失败)
+
+`Promise.race(promises: Iterable<Promise>)`：返回执行最快的 Promise（不考虑对错）
+
+`Promise.any([promises: Iterable<Promise>])` 与 race 类似，但是它只会返回第一个**成功**的最快完成的的 Promise，如果所有的 Promise 都失败会返回一个错误信息。
+
+## async/await对比promise的优势
+
+
+- promise的出现解决了传统callback函数导致的回调地狱问题，但是他的语法导致它纵向发展形成了一个回调链，遇到复杂的业务场景显然是不美观的； 
+- Async/await 是 promise 之上的语法糖，基于Promise实现。它提供了一种更简洁的异步代码编写方法，使其更易于读取和编写。使用 Async/Await，您可以编写类似于同步代码的异步代码。
+- 在 async/await 中， async声明异步函数。await 等待promise解析，然后再继续执行函数。关键字 await 只能在 async 函数中使用。
+
+## ESM、CommonJS
+
+两者都是模块化规范。
+
+### CommonJS
+
+node 中，默认支持的模块化规范叫做 CommonJS。
+
+- 导入模块：使用require函数。文件扩展名可以省略，会自动补全
+- 导出模块：module.exports
+
+```js
+const path = require("path");
+```
+
+```js
+module.exports = {
+  a: "哈哈",
+  b: [1, 3, 5, 7],
+  c: () => {
+    console.log(111);
+  },
+};
+```
+
+原理：所有的 CommonJS 的模块都会被包装到一个函数中
+
+```js
+(function (exports, require, module, __filename, __dirname) {
+  // 模块代码会被放到这里
+});
+```
+
+### ESM
+
+默认情况下，node 中的模块化标准是 CommonJS。要想使用 ES 模块化(ESM)，可以采用以下两种方案
+
+1. 使用 mjs 作为扩展名
+2. 修改 package.json 将模块化规范设置为 ES 模块：设置 `"type": "module"`，则当前项目下所有的 js 文件都默认为 es module 规范
+
+ESM规范：
+
+- 导入模块：使用 `import {...} from "...`。文件扩展名不能省略
+  - 导入模块的默认导出时，没有中括号
+- 导出模块：`export`
+  - 设置默认导出：`export default`
+
+通过 ES 模块化，导入的内容都是常量。es 模块都是运行在严格模式下的
+
+## let、const、var 的区别
+
+
+
+```js
+var name = "NJU";
+
+function sayHello() {
+    console.log(name);
+    var name = "Gemini";
+}
+
+sayHello(); // undefined
+```
+
+从执行上下文来解释上面的代码：
+
+1. 开始执行js代码
+
+- 创建全局上下文：`name` 被初始化为 `undefined`（变量提升）。
+- 执行代码：`name` 被赋值为 `"NJU"`。
+
+2. 调用 `sayHello()`：
+
+- 创建函数上下文： 引擎扫一遍内部，发现有 `var name`，于是将函数内部的 `name` 初始化为 `undefined`（这是为什么输出是 `undefined` 而不是 `"NJU"`，因为它遮蔽了外层作用域）。
+- 执行函数代码： `console.log(name)` 打印出 `undefined`，然后执行赋值 `name = "Gemini"`。
+
+---
+
+
+
+- 块级作用域： 块作用域由 { }包裹，let 和 const 具有块级作用域，var 不存在块级作用域。块级作用域解决了 ES5 中的两个问题：
+  - 内层变量可能覆盖外层变量
+  - 用来计数的循环变量泄露为全局变量
+- 变量提升： var 存在变量提升，let 和 const 不存在变量提升，即在变量只能在声明之后使用，否在会报错。
+- 给全局添加属性： 浏览器的全局对象是 window，Node 的全局对象是 global。var 声明的变量为全局变量，并且会被添加为全局对象的属性，但是 let 和 const 不会。
+- 重复声明： var 声明变量时，可以重复声明变量，后声明的同名变量会覆盖之前声明的遍历。const 和 let 不允许重复声明变量。
+- 初始值设置： 在变量声明时，var 和 let 可以不用设置初始值。而 const 声明变量必须设置初始值。
+- 暂时性死区：在使用 let、const 命令声明变量之前，该变量都是不可用的。使用 var 声明的变量不存在暂时性死区
+
+## Set、Map 的区别
+
+Set 是没有重复元素的集合，类似数组，可以按照添加顺序来遍历。
+
+Map 是键值对的集合，可以按照数据插入时的顺序遍历所有的元素。
+
+## Object 和 Map 的比较
+
+- 键的类型：Object 的键为字符串或 symbol，Map 的键可以是任意类型
+- 必须手动计算 Object 的大小，但是可以很容易地获取 Map 的大小（size）
+- 键值对的顺序：Map 中的键值对是按照插入的顺序存储的，而对象中的键值对则没有顺序
+- Map 的遍历遵循元素的插入顺序。而 Object 需要手动遍历
+- Object 有原型，所以映射中有一些缺省的键。
+
+使用场景：
+
+- 如果键在运行时才能知道，或者所有的键类型相同，所有的值类型相同，那就使用 Map。
+- 如果需要将原始值存储为键，则使用 Map，因为 Object 将每个键视为字符串，不管它是一个数字值、布尔值还是任何其他原始值。
+- 如果存在需要对个别元素进行操作的逻辑，使用 Object。
+
+## weakMap 和 Map 的比较
+
+- weakMap 的键只能是对象类型
+- 键值关系的存储：
+  - map 使用常规的引用来管理键和值之间的关系，因此即使键不再使用，map 仍然会保留该键的内存。
+  - weakMap 使用弱引用来管理键和值之间的关系，因此如果键不再有其他引用，垃圾回收机制可以自动回收键值对。## promise 的常用方法
+
+## ES7
+
+
+
+## 可选链 `?.`
+

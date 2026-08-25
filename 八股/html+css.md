@@ -51,18 +51,24 @@ iframe 通常用来加载外部链接，不会影响网页内容的加载。
 
 ## script 标签中 defer 和 async 的区别
 
-相同点：都是表示异步加载外部 JS 脚本，不会阻碍页面的加载解析。
+背景：浏览器在解析 HTML 时，如果遇到`<script>` 标签，就会先停下手边建构 DOM 的工作，开始载入`<script > `的JS脚本资源，并执行下载好的脚本。直到下载与执行完毕后，才会继续 DOM 的建构。如果把script位置放在上面，可能会使得画面比较晚才被渲染；如果把script位置放在下面，会让画面虽然渲染出来，但是没有功能。
+
+相同点：都是表示异步加载 JS 脚本，不会阻碍页面的加载解析。 DOM 的建构与脚本的载入同步进行，让用户体验更好。
 
 区别：
 
-- 执行顺序：有多个 async 标签不能保证先后加载顺序，而多个 defer 标签可以按先后顺序加载。
-- 是否立即执行：async 加载完脚本后会立即执行，defer 是要等文档解析完成后才执行。
+- 是否立即执行：async 加载完后会立即执行脚本，defer 是要等DOM解析完成后才执行脚本。
+- 执行顺序：有多个 async 标签不能保证先后加载顺序，哪个先下载完成就先执行。而多个 defer 标签可以按先后顺序同步下载执行，适合于有**依赖关系**的多个脚本。
+
+注意：无论是async还是defer，在执行脚本时，都会暂停HTML解析
 
 ## 行内元素、块级元素、空（void）
 
 - 行内： a、b、span、input、img、select、 strong
 - 块：p、div、h1、ul、ol、li、dl、dt、dd
 - 空：`<hr>`、`<br>`、`<img>`、`<input>`、`<link>`、`<meta>`
+
+![img](https://uploadfiles.nowcoder.com/images/20200214/585869957_1581677691624_1AD9C6C7826FEFC6CFEFB9C93584E108)
 
 ## 怎样添加、移除、移动、复制、创建和查找节点
 
@@ -81,7 +87,8 @@ iframe 通常用来加载外部链接，不会影响网页内容的加载。
 ## 伪类和伪元素的区别是什么？
 
 - **伪类** ：以冒号(:)开头，用于选择处于特定**状态**的元素。例如 `:hover`, `:focus`, `:nth-child()`
-- **伪元素** ：以双冒号(::)开头，表现得像是在文档中插入新的虚构的元素（浏览器自动创建）。例如 `::before`, `::after`, `::first-letter`
+- **伪元素** ：通常以双冒号(::)开头，表现得像是在文档中插入新的虚构的元素（浏览器自动创建）。例如 `::before`, `::after`, `::first-letter`
+- ![img](https://uploadfiles.nowcoder.com/images/20200203/4490016_1580713321904_35DFFC696026ED936989A8FA56C05E15)
 
 伪类使得你可以将处于特定状态的元素作为目标，就像你已向 DOM 添加了该状态的类一样。伪元素的作用就像是你已向 DOM 添加了全新的元素，并允许你为其设置样式。`::before` 和 `::after` 伪元素让你可以使用 CSS 将内容插入文档。
 
@@ -111,6 +118,8 @@ p::first-letter {
 
 # CSS
 
+## 可视化模型
+
 ## CSS3 新增特性
 
 - 新增 CSS 选择器、伪类
@@ -135,10 +144,12 @@ p::first-letter {
 
 ![alt text](assets/html+css/image-1.png)
 
-标准盒模型和 IE 盒模型的区别在于 width 和 height 对应的范围不同:
+W3C标准盒模型和 IE 盒模型的区别在于 width 和 height 对应的范围不同:
 
 - 标准盒模型的 width、height 只包含 content
 - IE 盒模型的的 width、height 除了 content 本身，还包含了 border、padding
+
+![1777801051313](image/html+css/1777801051313.png)
 
 ![alt text](assets/html+css/image.png)
 
@@ -277,13 +288,11 @@ display:-webkit-box;         // 作为弹性伸缩盒子模型显示。
 - 绝对长度单位：cm、mm、in、px、pt、pc
 - 相对长度单位：大小和元素的其他属性无关。em、ex、ch、rem、vw、vh、vmin、vmax、%
 - px 像素
-
   - CSS 像素
   - 物理像素
 
 - 百分比 %：作用于父元素，当浏览器的宽度或者高度发生变化时，当前元素依据比例发生变化
 - em、rem：相对长度单位
-
   - em：相对于父元素
   - rem：相对于根元素
 
@@ -309,6 +318,12 @@ vh、vw：主要用于页面视口大小布局
 - 对于 position: fixed 的元素是相对于 ViewPort（可视窗口）
 
 ## BFC、IFC 是什么
+
+![1777782443839](image/html+css/1777782443839.png)
+
+![1777782526484](image/html+css/1777782526484.png)
+
+![1777782547765](image/html+css/1777782547765.png)
 
 - BFC：块级布局（垂直）
 - IFC：文本布局（水平）
@@ -387,6 +402,143 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 - 为父元素设置 `overflow: auto`，同上一条，但内部宽高超过父级 div 时，会出现滚动条。
 - 给父元素一个高度 height
 - 父元素内部末尾插入一个空的 div 并设置 clear: both，清除浮动
+
+## Flex 和 Grid 的常用写法（两栏、三栏、圣杯、双飞翼）
+
+### Flex 实现 两栏、三栏
+
+两栏：左侧固定宽度，右侧flex: 1自适应。
+
+```css
+.container {
+  display: flex;
+}
+.left {
+  width: 200px;
+}
+.right {
+  flex: 1;
+} /* 占据剩余所有空间 */
+```
+
+三栏：左右固定宽度，中间flex: 1自适应
+
+```css
+.container {
+  display: flex;
+}
+.left,
+.right {
+  width: 150px;
+}
+.main {
+  flex: 1;
+}
+```
+
+### Grid 实现 两栏、三栏
+
+两栏：
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: 200px 1fr; /* 1fr 代表一份剩余空间 */
+}
+```
+
+三栏：
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: 150px 1fr 150px;
+}
+```
+
+### 圣杯：页头、页脚固定，中间三栏（主栏优先渲染，两侧固定宽度）
+
+Flex 实现:
+
+```html
+<div class="container">
+  <!-- 主内容放在最前面，浏览器先加载 -->
+  <div class="main">我是主要内容（优先加载）</div>
+
+  <div class="left">左侧栏</div>
+  <div class="right">右侧栏</div>
+</div>
+<style>
+  .container {
+    display: flex;
+    flex: 1; /* 撑开中间区域 */
+  }
+
+  .main {
+    flex: 1;
+  }
+  .left {
+    order: -1;
+    width: 200px;
+  }
+  .right {
+    width: 200px;
+  }
+</style>
+```
+
+Grid实现：
+
+```css
+.holy-grail {
+  display: grid;
+  grid-template-columns: 200px 1fr 200px;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "header header header"
+    "left   main   right"
+    "footer footer footer";
+  height: 100vh;
+}
+
+header {
+  grid-area: header;
+}
+footer {
+  grid-area: footer;
+}
+.left {
+  grid-area: left;
+}
+.main {
+  grid-area: main;
+}
+.right {
+  grid-area: right;
+}
+```
+
+### 双飞翼：三栏，中间主栏内容不被侧边栏遮挡
+
+```css
+/* HTML 结构：.main-wrapper( .main ), .left, .right */
+.container {
+  display: flex;
+}
+
+.main-wrapper {
+  flex: 1;
+  padding: 0 200px; /* 为左右留出空间 */
+}
+
+.left {
+  width: 200px;
+  order: -1;
+} /* order 可以改变渲染顺序 */
+.right {
+  width: 200px;
+}
+```
 
 ## 实现两栏布局
 
@@ -699,12 +851,10 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 根据元素标签的性质，可以分为：
 
 - 内联元素居中布局：
-
   - 内联元素（如 `<span>, <a>, <img>, <em>, <strong> `等）的特点是它们会排在一行，宽度由内容决定，并且不能设置 width 和 height。
   - 内联元素的居中布局，通常是通过设置它们的父级块级元素来实现的。
 
 - 块级元素居中布局：
-
   - 块级元素（如 `<div>, <p>, <h1>, <ul>, <li>` 等）的特点是它们独占一行，默认宽度为父元素的 100%，并且可以设置 width 和 height。
   - 块级元素的居中布局，通常是通过设置左右外边距（margin）来实现
 
@@ -818,8 +968,8 @@ IFC(inline formatting context)，即行内格式化上下文，用于排列 inli
 flex 布局的关键属性作用：
 
 - display: flex：表示该容器内部的元素将按照 flex 进行布局
-- align-items: center：表示这些元素将相对于本容器**水平居中**
-- justify-content: center：表示这些元素将相对于本容器**垂直居中**
+- justify-content: center：表示这些元素将相对于本容器**水平居中**
+- align-items: center：表示这些元素将相对于本容器**垂直居中**
 
 ```html
 <style>
@@ -899,7 +1049,7 @@ flex 布局是 CSS3 新增的一种布局方式，能够根据不同屏幕尺寸
 
 - static 默认值，没有定位，元素正常在文档流中显示
 - relative 相对定位，相对于原来的位置进行定位
-- absolute 绝对定位，相对于 static 定位意外以外的一个父元素进行定位。
+- absolute 绝对定位，相对于 static 定位以外的一个父元素进行定位。
 - fixed 绝对定位，相对于浏览器窗口
 - sticky 粘性定位，基于用户滚动位置
 
@@ -927,9 +1077,21 @@ transform: scale(0.5, 0.5);
 
 ## 如何解决 1px
 
-1px 问题指的是：在一些 Retina 屏幕 的机型上，移动端页面的 1px 会变得很粗，呈现出不止 1px 的效果。原因很简单——CSS 中的 1px 并不能和移动设备上的 1px 划等号。
+1px 问题指的是：在一些 高DPR 屏幕 的机型上，移动端页面的 1px 会变得很粗，呈现出不止 1px 的效果。原因很简单——CSS 中的 1px 并不能和移动设备上的 1px 划等号。iPhone 的 DPR = 3 CSS 写 1px → 实际渲染 3 个物理像素 → 看起来比设计稿"粗"
+
+先画 1px，再用 transform 缩小到 1/DPR：transform：scaleY(0.3333);
 
 - 直接写 0.5px
 - 利用伪元素，先放大再缩小
 - 使用 viewport 缩放来解决
 - 采用 meta viewport 的方式，这样就能缩放到原来的 0.5 倍，如果是 1px 那么就会变成 0.5px。viewport 只针对于移动端，只在移动端上才能看到效果。
+
+## box-sizing的属性
+
+`box-sizing` 决定了**元素的宽度和高度（width/height）的计算方式**——是否包含内边距（padding）和边框（border）。它有三个常用值：`content-box`（默认值）、`border-box`、inherit。
+
+- `content-box`：设置的宽高只作用于内容区域，不包含padding（内边距）和border（边框）
+- `border-box`：设置的宽高（width）**包含了 padding 和 border**
+- `inherit`：从父元素继承 box-sizing 属性的值。
+
+  inherit可以用于任何css属性。
